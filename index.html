@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#d9ecff" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#121a26" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="format-detection" content="telephone=no">
+<title>ก้อนกล้าม · แอปฝึกของฉัน</title>
+<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-192.png"><link rel="icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Mitr:wght@400;500;600&family=Mali:wght@400;500;600&family=Itim&display=swap" rel="stylesheet">
+<style>
+/* VOICE: นุ่ม อบอุ่น น่ารัก กวนนิดๆ ใช้ฝึกจริงในยิม
+   IDEA: วิดเจ็ตพาสเทลแบบสมุดบันทึกนิสัย หน้ากลมๆ บอกอารมณ์แต่ละวัน
+   PICTURE: น้องก้อนกล้าม + การ์ดพาสเทล (บันทึกสัปดาห์ เป้าหมาย เวลาฝึก) + เมนูกระจก
+   COLOUR and TYPE: ฟ้าอ่อนเป็นพื้น การ์ดเขียว/เหลือง/พีช ตัวหนังสือน้ำตาลเข้ม ปุ่มน้ำตาลไหม้ / Mitr + Mali + Itim
+   LAYOUT: เฟรม 560px คอลัมน์เดียว เมนูกระจกลอยล่าง หน้าย่อยมีปุ่มย้อนกลับ */
+:root{color-scheme:light dark;
+--bg:light-dark(#d9ecff,#121a26);--card:light-dark(#ffffff,#1d2838);--ink:light-dark(#4a2c22,#f6ebe4);--mute:light-dark(#7a5a4c,#c9b3a8);
+--line:light-dark(rgba(91,58,46,.14),rgba(255,255,255,.12));--chip:light-dark(#f4efeb,#2a3546);
+--t-lime:light-dark(#e3f5d4,#1f3324);--t-yellow:light-dark(#fff1bf,#3a3218);--t-orange:light-dark(#ffe6dd,#3a2520);
+--t-sky:light-dark(#dcecff,#1c2c44);--t-violet:light-dark(#ece4ff,#2a2444);--t-pink:light-dark(#ffdce8,#3a2030);
+--s-lime:#7fdc9a;--s-yellow:#ffd36b;--s-sky:#8cc8ff;--s-violet:#b49cff;--s-pink:#ff9ec4;--s-orange:#f6a08e;
+--btn:light-dark(#6b2e1f,#ffb59e);--btn-ink:light-dark(#ffffff,#3a1a10);--ok:#7fdc9a;--ok-t:light-dark(#e3f5d4,#1f3a28);--red:light-dark(#c2382b,#ff8a7e);
+--nav:light-dark(rgba(240,247,255,.84),rgba(29,40,56,.86));--navon:light-dark(#cfe0f2,#33465f);
+--shadow:light-dark(0 8px 24px rgba(91,58,46,.08),0 8px 24px rgba(0,0,0,.3))}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Mali,Mitr,system-ui,sans-serif;overflow-x:clip;-webkit-tap-highlight-color:transparent}
+h1,h2,h3,.num,button{font-family:Mitr,Mali,sans-serif}
+#app{max-width:560px;margin:0 auto;padding:0 max(18px,env(safe-area-inset-right)) calc(130px + env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left));min-height:100dvh}
+body.full #app{padding-bottom:calc(120px + env(safe-area-inset-bottom))}
+h1{font-size:30px;line-height:1.15;margin:0;font-weight:600}
+h2{font-size:19px;line-height:1.25;margin:0;font-weight:500}
+button{font-size:16px;color:inherit;cursor:pointer;border:0;background:none;min-height:44px;border-radius:14px;font-weight:500;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+button:disabled{opacity:.45;cursor:default}
+button:focus-visible,input:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid var(--btn);outline-offset:2px}
+.mute{color:var(--mute);font-size:14px}
+.top{position:sticky;top:0;z-index:5;margin:0 -18px 8px;padding:calc(env(safe-area-inset-top) + 12px) 18px 10px;display:flex;align-items:center;justify-content:space-between;gap:10px;transition:background .2s}
+body.sc .top{background:color-mix(in srgb,var(--bg) 85%,transparent);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
+.card{background:var(--card);border-radius:26px;padding:18px;margin-bottom:14px;box-shadow:var(--shadow)}
+.tint{box-shadow:none}
+.t-lime{background:var(--t-lime)}.t-yellow{background:var(--t-yellow)}.t-orange{background:var(--t-orange)}.t-sky{background:var(--t-sky)}.t-violet{background:var(--t-violet)}.t-pink{background:var(--t-pink)}
+.pri{background:var(--btn);color:var(--btn-ink);border-radius:99px;padding:0 22px;min-height:48px}
+.sec{background:var(--chip);border-radius:99px;padding:0 18px}
+.ghost{color:var(--ink);font-weight:500;padding:0 8px;display:inline-flex;align-items:center;gap:2px}
+.wide{width:100%}
+.row{display:flex;gap:10px;align-items:center}
+.sp{justify-content:space-between}
+.ic{width:44px;min-width:44px;display:grid;place-items:center;color:var(--mute);border-radius:50%}
+.ic:hover{background:var(--chip);color:var(--ink)}.ic:disabled{opacity:.25}
+svg.i{width:22px;height:22px}
+.avatar{width:52px;height:52px;min-height:52px;border-radius:50%;background:var(--t-yellow);display:grid;place-items:center;overflow:hidden;padding:4px}
+.avatar svg{width:100%;height:auto}
+.badge{display:inline-flex;align-self:flex-start;align-items:center;gap:4px;background:var(--t-lime);color:light-dark(#3f6b1f,#bfeaa0);font:500 13px Mitr,sans-serif;border-radius:99px;padding:2px 10px;white-space:nowrap}
+.bubble{font:18px/1.35 Itim,Mali,sans-serif;color:var(--mute);margin:2px 0 4px}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) 120px;gap:8px;align-items:end}
+.hero h2{font-size:24px;font-weight:600}
+.mas{display:block;width:100%;height:auto;overflow:visible}
+@media(prefers-reduced-motion:no-preference){.bob{animation:bob 2.6s ease-in-out infinite;transform-origin:50% 100%}@keyframes bob{50%{transform:translateY(-5px) scale(1.02,.98)}}}
+.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;text-align:center;margin-top:12px}
+.week span{display:block;font:500 13px Mitr,sans-serif;color:var(--mute);margin-top:2px}
+.face{width:100%;max-width:44px;height:auto;display:block;margin:0 auto}
+.goalbar{display:flex;align-items:center;gap:10px;margin-top:12px}
+.segs{flex:1;display:flex;gap:4px}.segs i{flex:1;height:16px;border-radius:5px;background:light-dark(#fbdca6,#5a4a20)}.segs i.on{background:#f2894f}
+.flag{background:var(--s-yellow);color:#4a2c22;border-radius:10px 10px 2px 10px;padding:2px 10px;font:600 14px Mitr,sans-serif;white-space:nowrap}
+.num{font-size:30px;line-height:1;font-weight:600;white-space:nowrap}.num small{font-size:14px;font-weight:500}
+.bars{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;align-items:end;height:120px;margin-top:14px}
+.bars div{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:6px;font:500 12px Mitr,sans-serif;color:var(--mute)}
+.bars i{display:block;width:100%;max-width:30px;border-radius:15px;background:var(--s-orange);min-height:8px}
+.bars .zero i{background:light-dark(#f9d6cc,#4a3029)}.bars .today{color:var(--ink);font-weight:600}
+.hscroll{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:2px 2px 6px;margin-right:-18px;scrollbar-width:none}
+.hscroll>*{flex:0 0 74%;scroll-snap-align:start;margin:0}
+.sechead{display:flex;justify-content:space-between;align-items:center;margin:20px 0 10px}
+.sechead h2{font-size:21px;font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 14px}
+.tag{background:color-mix(in srgb,var(--card) 70%,transparent);border-radius:99px;padding:2px 10px;font-size:13px;white-space:nowrap}
+.new{width:100%;border:2px dashed var(--line);border-radius:22px;min-height:60px;font-weight:500;color:var(--mute)}
+.rname{width:100%;font:600 26px/1.2 Mitr,sans-serif;color:var(--ink);background:none;border:0;border-bottom:2px dashed var(--line);padding:6px 0;margin:0 0 12px}
+.rname::placeholder{color:var(--mute)}
+.sw{display:flex;gap:10px;margin-bottom:16px}.sw button{width:40px;min-width:40px;height:40px;min-height:40px;border-radius:50%}
+.sw button[aria-pressed=true]{box-shadow:0 0 0 3px var(--bg),0 0 0 5px var(--ink)}
+.exh{display:flex;align-items:flex-start;gap:2px}
+.exh h3{flex:1;margin:0;font-size:18px;font-weight:600;line-height:1.3}
+.exh small{display:block;font:400 13px Mali,sans-serif;color:var(--mute)}
+.ss{display:inline-grid;place-items:center;min-width:30px;height:24px;padding:0 6px;border-radius:8px;background:var(--btn);color:var(--btn-ink);font:600 13px Mitr,sans-serif;margin-right:6px;vertical-align:2px}
+.sslink{display:flex;align-items:center;justify-content:center;gap:6px;margin:-6px 0 8px;font:500 13px Mitr,sans-serif;color:var(--mute)}
+.sets{width:100%;border-collapse:separate;border-spacing:0 6px;margin-top:6px}
+.sets th{font:500 13px Mitr,sans-serif;color:var(--mute);text-align:center;padding:0 2px}
+.sets td{text-align:center;padding:0 2px}
+.sets td:first-child{width:34px;font:600 15px Mitr,sans-serif}
+.prev{font-size:13px;color:var(--mute);white-space:nowrap}
+.sets input{width:100%;max-width:92px;text-align:center;font:600 18px Mitr,sans-serif;color:var(--ink);background:var(--chip);border:2px solid transparent;border-radius:14px;min-height:44px}
+.sets input:focus{border-color:var(--btn)}
+.chk{width:46px;height:44px;background:var(--chip);display:grid;place-items:center;color:var(--mute);border-radius:50%}
+tr.done td{background:var(--ok-t)}tr.done td:first-child{border-radius:14px 0 0 14px}tr.done td:last-child{border-radius:0 14px 14px 0}
+tr.done .chk{background:var(--ok);color:#1f3a28}tr.done input{background:transparent}
+.prb{display:inline-block;background:var(--s-yellow);color:#4a2c22;border-radius:6px;font:600 11px Mitr,sans-serif;padding:0 5px;margin-left:2px;vertical-align:middle}
+.addset{width:100%;background:var(--chip);border-radius:14px;margin-top:4px;font-size:15px}
+.notein{width:100%;margin-top:8px;font:15px Mali,sans-serif;color:var(--ink);background:transparent;border:1.5px dashed var(--line);border-radius:12px;padding:10px 12px;min-height:44px}
+.exfoot{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.exfoot button{background:var(--chip);border-radius:99px;padding:0 14px;font-size:14px;min-height:40px}
+.exfoot button[aria-pressed=true]{background:var(--btn);color:var(--btn-ink)}
+.wtop{position:sticky;top:0;z-index:5;margin:0 -18px 14px;padding:calc(env(safe-area-inset-top) + 10px) 18px 14px;background:color-mix(in srgb,var(--bg) 88%,transparent);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
+.meta{display:flex;gap:16px;font-size:14px;color:var(--mute);flex-wrap:wrap}.meta b{font:600 18px Mitr,sans-serif;color:var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums}
+.track{position:relative;height:12px;background:var(--card);border-radius:99px;margin:14px 16px 4px 0}
+.track i{display:block;height:100%;background:var(--ok);border-radius:99px;transition:width .3s}
+.track .mas{position:absolute;top:50%;width:32px;transform:translate(-50%,-58%);transition:left .3s}
+.pick{display:flex;width:100%;text-align:left;align-items:center;gap:12px;padding:12px 16px;margin-bottom:10px;border-radius:20px}
+.pick b{display:block;font-size:17px;font-weight:500}.pick small{font:400 14px Mali,sans-serif;color:var(--mute)}
+.empty{text-align:center;padding:14px 8px}
+.empty svg{width:110px;margin:0 auto 6px;display:block}
+.empty b{display:block;font:600 20px Mitr,sans-serif;margin-bottom:2px}
+.resume{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;text-align:left;background:var(--btn);color:var(--btn-ink);border-radius:22px;padding:10px 10px 10px 18px;margin-bottom:14px}
+.resume span{background:var(--btn-ink);color:var(--btn);border-radius:99px;padding:8px 14px;white-space:nowrap}
+.sched{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin-top:12px}
+.sched button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:70px;padding:6px 2px;border-radius:16px;background:var(--chip);font:600 14px Mitr,sans-serif;line-height:1.2}
+.sched button small{font:400 12px Mali,sans-serif;color:var(--mute);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+.sched button.td{box-shadow:inset 0 0 0 2px var(--btn)}
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;text-align:center;margin-top:8px}
+.cal b{font:500 13px Mitr,sans-serif;color:var(--mute);padding:4px 0}
+.cal button{min-height:46px;padding:2px;border-radius:14px;font:500 13px Mitr,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
+.cal button svg{width:26px;height:26px}
+.cal .td{box-shadow:inset 0 0 0 2px var(--btn)}.cal .sel{background:var(--t-yellow)}
+details.card summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;gap:10px;align-items:center}
+details.card summary::-webkit-details-marker{display:none}
+.hd{display:flex;gap:12px;align-items:center}.hd svg{width:42px;flex:none}
+.hd h3{margin:0;font-size:17px;font-weight:600}.hd small{font-size:13px;color:var(--mute)}
+.hv{text-align:right;font-size:13px;white-space:nowrap;color:var(--mute)}.hv b{display:block;font:600 16px Mitr,sans-serif;color:var(--ink)}
+.hx{margin:12px 0 0;padding:0;list-style:none;font-size:15px}.hx li{padding:8px 0;border-top:1px solid var(--line)}.hx b{display:block;font-family:Mitr,sans-serif;font-weight:500}
+.danger{color:var(--red);font-weight:500;margin-top:6px}
+.fig{position:relative;height:200px;margin-top:10px}.fig svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.hrow{display:grid;grid-template-columns:9.5em minmax(0,1fr) 3em;gap:8px;align-items:center;margin:8px 0;font-size:15px}
+.hrow span:last-child{text-align:right;font-family:Mitr,sans-serif}
+.meter{height:16px;background:color-mix(in srgb,var(--card) 70%,transparent);border-radius:99px;overflow:hidden}.meter i{display:block;height:100%;border-radius:99px}
+.xchips{display:flex;gap:6px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none;flex:none}
+.chip{min-height:44px}
+.chip{flex:none;background:var(--card);padding:0 16px;font-size:15px;border-radius:99px}
+.chip[aria-pressed=true]{background:var(--btn);color:var(--btn-ink)}
+.tiles3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}
+.tiles3 div{background:var(--card);border-radius:18px;padding:12px}
+.tiles3 .num{font-size:24px}.tiles3 small{display:block;font-size:13px;color:var(--mute)}
+.set{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);cursor:default}
+.set:last-child{border:0}.set small{display:block;color:var(--mute);font-size:13px}
+.set:has(.tog){cursor:pointer}
+.tog{width:56px;min-width:56px;height:32px;min-height:32px;border-radius:99px;background:var(--chip);position:relative}
+.tog::after{content:"";position:absolute;top:3px;left:3px;width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:left .15s}
+.tog[aria-checked=true]{background:var(--ok)}.tog[aria-checked=true]::after{left:27px}
+.step{display:flex;align-items:center;gap:6px}.step b{min-width:3.6em;text-align:center;font-family:Mitr,sans-serif;font-weight:500}
+.step button{width:44px;background:var(--chip);border-radius:50%;font-size:20px}
+.txt{width:100%;font:16px Mali,sans-serif;color:var(--ink);background:var(--chip);border:2px solid transparent;border-radius:14px;padding:10px 14px;min-height:48px}
+.txt:focus{border-color:var(--btn);outline:none}
+label.lb{display:block;font:500 14px Mitr,sans-serif;color:var(--mute);margin:12px 0 6px}
+nav{position:fixed;left:50%;transform:translateX(-50%);bottom:max(14px,env(safe-area-inset-bottom));z-index:6;width:min(524px,calc(100% - 28px));background:var(--nav);-webkit-backdrop-filter:blur(20px) saturate(1.6);backdrop-filter:blur(20px) saturate(1.6);border:1.5px solid light-dark(#fff,rgba(255,255,255,.08));border-radius:32px;box-shadow:0 10px 30px rgba(60,100,150,.2);padding:6px;display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+body.full nav{display:none}
+nav button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;font-size:13px;min-height:60px;border-radius:26px;color:var(--ink)}
+nav button svg{width:26px;height:26px}nav button[aria-current=page]{background:var(--navon);font-weight:600}
+.floatw{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(max(14px,env(safe-area-inset-bottom)) + 86px);z-index:6;background:var(--btn);color:var(--btn-ink);border-radius:99px;padding:0 20px;white-space:nowrap;box-shadow:var(--shadow)}
+.rest{position:fixed;left:50%;transform:translateX(-50%);bottom:max(14px,env(safe-area-inset-bottom));z-index:7;width:min(524px,calc(100% - 28px));display:none;grid-template-columns:48px minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 10px 8px 12px;border-radius:30px;background:var(--btn);color:var(--btn-ink);box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.rest.on{display:grid}.rest .num{font-size:30px;color:inherit;font-variant-numeric:tabular-nums}
+.rest p{margin:2px 0 0;font:15px/1.25 Itim,Mali,sans-serif;opacity:.9}
+.rbt{display:flex;gap:6px}.rbt button{background:rgba(255,255,255,.18);border-radius:99px;padding:0 10px;min-width:46px;font-size:15px}.rbt .go{background:var(--btn-ink);color:var(--btn)}
+.sheet{position:fixed;inset:0;background:rgba(20,30,45,.4);display:none;align-items:flex-end;justify-content:center;z-index:9}
+.sheet.on{display:flex}
+.panel{background:var(--bg);width:100%;max-width:560px;max-height:calc(100dvh - env(safe-area-inset-top) - 24px);border-radius:30px 30px 0 0;display:flex;flex-direction:column;padding:16px max(18px,env(safe-area-inset-right)) 0 max(18px,env(safe-area-inset-left))}
+.panel::before{content:"";display:block;width:44px;height:5px;border-radius:3px;background:var(--mute);opacity:.4;margin:-6px auto 8px;flex:none}
+.panel h2{font-size:22px;flex:1;font-weight:600}
+.opts{overflow-y:auto;flex:1;padding:2px 2px 6px}
+.opts h4{font:500 14px Mitr,sans-serif;color:var(--mute);margin:12px 0 6px}
+.opt{display:flex;width:100%;text-align:left;justify-content:space-between;align-items:center;background:var(--card);padding:8px 16px;margin-bottom:6px;font-family:Mali,sans-serif;border-radius:16px}
+.opt i{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);flex:none;display:grid;place-items:center}
+.opt i svg{width:16px;height:16px}
+.opt[aria-pressed=true]{background:var(--t-lime)}.opt[aria-pressed=true] i{background:var(--btn);border-color:var(--btn);color:var(--btn-ink)}
+.pfoot{padding:12px 0 max(16px,env(safe-area-inset-bottom));display:flex;gap:10px;flex:none}
+.toast{position:fixed;left:50%;bottom:calc(max(14px,env(safe-area-inset-bottom)) + 86px);transform:translateX(-50%);z-index:12;display:none;align-items:center;gap:10px;padding:10px 18px;font:17px Itim,Mali,sans-serif;width:max-content;max-width:calc(100vw - 32px);white-space:nowrap;background:var(--card);color:var(--ink);border-radius:99px;box-shadow:0 8px 30px rgba(0,0,0,.18)}
+.toast.on{display:flex}.toast button{min-height:36px;padding:0 14px;background:var(--btn);color:var(--btn-ink);border-radius:99px;font-size:15px}
+.cele{position:fixed;inset:0;z-index:13;overflow-y:auto;justify-content:safe center!important;background:var(--t-yellow);display:none;flex-direction:column;align-items:center;justify-content:center;padding:calc(env(safe-area-inset-top) + 24px) 24px calc(env(safe-area-inset-bottom) + 24px);text-align:center;overflow:hidden}
+.cele.on,.login.on{display:flex}
+.login{position:fixed;inset:0;z-index:14;overflow:hidden;background:var(--bg);display:none;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center}.login .mwrap{width:160px}.cele h1{font-size:34px;margin:8px 0 4px}.cele .mwrap{width:180px}
+.cele .tiles3{width:min(420px,100%);margin:18px 0}
+.conf{position:absolute;top:-20px;width:10px;height:16px;border-radius:3px;pointer-events:none}
+@media(prefers-reduced-motion:no-preference){.conf{animation:fall linear forwards}@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}.card{animation:pop .22s ease-out}@keyframes pop{from{opacity:0;transform:translateY(6px)}}}
+.note{font-size:14px;color:var(--mute);margin:10px 0}
+.note button{min-height:32px;text-decoration:underline;padding:0 4px;font-family:Mali,sans-serif;font-size:14px}
+
+/* tab screens fit one screen like a native app; only overflow scrolls (very short screens) */
+body.tab #app{height:100dvh;display:flex;flex-direction:column;overflow-y:auto;padding-bottom:calc(max(14px,env(safe-area-inset-bottom)) + 88px)}
+body.tab .top{position:static;margin:0 -18px 2px;padding:calc(env(safe-area-inset-top) + 10px) 18px 8px}
+body.tab .card{margin-bottom:10px;padding:14px 16px}
+body.tab .grow{flex:1 0 auto;display:flex;flex-direction:column}
+body.tab .grow .bars{flex:1 0 64px;height:auto}
+body.tab .grow .fig{flex:1 0 110px;height:auto}
+body.tab .hero{grid-template-columns:minmax(0,1fr) 96px}
+body.tab .hero h2{font-size:22px}
+body.tab .bubble{font-size:17px;margin:0 0 2px}
+body.tab .week{margin-top:8px}.week .face{max-width:38px}
+body.tab .goalbar{margin-top:10px}
+.linkrow{display:flex;align-items:center;gap:12px;width:100%;text-align:left;color:var(--ink)}
+.linkrow>span{flex:1}.linkrow b{display:block;font:500 17px Mitr,sans-serif}.linkrow small{color:var(--mute);font-size:13px}
+.linkrow .face{width:40px;flex:none}
+button.card.linkrow{min-height:64px}
+.calh{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));text-align:center;margin-top:4px}.calh b{font:500 13px Mitr,sans-serif;color:var(--mute)}
+body.tab .cal{flex:1;margin-top:2px;gap:2px}
+body.tab .cal button{min-height:30px;gap:0}.cal button svg{width:22px;height:22px}
+.dayrow{padding:10px 16px!important}
+body.tab .sched button{min-height:58px}
+.seg{display:flex;background:color-mix(in srgb,var(--card) 60%,transparent);border-radius:99px;padding:3px;margin-bottom:6px}
+.seg button{flex:1;min-height:38px;border-radius:99px;font-size:14px}.seg button[aria-pressed=true]{background:var(--card);font-weight:600}
+body.tab .hrow{margin:6px 0}
+body.tab .tiles3{margin-top:8px}
+
+.av{display:flex;align-items:center;justify-content:center;border-radius:50%;flex:none;overflow:hidden}.av .mas{width:78%;height:auto;flex:none}
+.prof{display:flex;align-items:center;gap:14px}
+.pen{background:var(--chip);color:var(--ink)!important;opacity:1}
+.stat3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:10px}.stat3 .card{margin:0}.stat3 .num{font-size:24px}.stat3 small{display:block;font-size:12.5px;color:var(--mute)}
+.menu{padding:4px 6px!important}
+.mrow{display:flex;align-items:center;gap:12px;width:100%;min-height:56px;padding:6px 10px;text-align:left;border-radius:16px;color:var(--ink);font-family:Mali,sans-serif}
+.mrow+.mrow{border-top:1px solid var(--line);border-radius:0}
+.mrow:hover{background:color-mix(in srgb,var(--chip) 60%,transparent)}
+.mic{width:36px;height:36px;border-radius:12px;background:var(--chip);display:grid;place-items:center;flex:none}
+.ml{flex:1;font-size:16px}.mv{color:var(--mute);font-size:13px;text-align:right;max-width:46%}
+.mrow>svg.i:last-child{color:var(--mute);width:18px;height:18px;flex:none}
+
+.gang{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:100%;margin-top:4px}
+.gang button{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;border-radius:18px;background:var(--chip);font-size:14px}
+.gang button[aria-pressed=true]{background:var(--t-yellow);box-shadow:inset 0 0 0 2px var(--btn);font-weight:600}
+@media(max-height:820px){body.tab .card{padding:12px 14px;margin-bottom:8px}body.tab .hero{grid-template-columns:minmax(0,1fr) 78px}body.tab .hero h2{font-size:20px}body.tab .week{margin-top:4px}.week .face{max-width:32px}body.tab .goalbar{margin-top:6px}.segs i{height:12px}body.tab h1{font-size:26px}body.tab .num{font-size:26px}button.card.linkrow{min-height:56px}body.tab .grow .bars{flex-basis:52px}}
+
+/* the gang wiggles: body sways, arms wave, eyes blink; tap for a bounce */
+@media(prefers-reduced-motion:no-preference){
+.mas .mb{transform-box:fill-box;transform-origin:50% 100%;animation:wig 3.2s ease-in-out infinite}
+.mas .ma{transform-box:fill-box;transform-origin:50% 100%;animation:wave 1.6s ease-in-out infinite}
+.mas .me{transform-box:fill-box;transform-origin:50% 50%;animation:blink 4.2s infinite}
+.mas.boing .mb{animation:boing .6s cubic-bezier(.3,1.6,.5,1)}
+@keyframes wig{0%,100%{transform:rotate(0) scale(1,1)}20%{transform:rotate(-4deg) scale(1.02,.98)}40%{transform:rotate(3deg) scale(.99,1.01)}60%{transform:rotate(-2deg)}80%{transform:rotate(1deg) scale(1.01,.99)}}
+@keyframes wave{0%,100%{transform:translateY(0) scaleY(1)}50%{transform:translateY(-3px) scaleY(1.06)}}
+@keyframes blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
+@keyframes boing{0%{transform:scale(1,1)}25%{transform:scale(1.15,.82) translateY(4px)}55%{transform:scale(.9,1.12) translateY(-10px)}80%{transform:scale(1.04,.97)}100%{transform:scale(1,1)}}
+.track .mas .mb,.face .mb{animation:none}
+}
+
+.heart{position:fixed;z-index:20;width:12px;height:12px;pointer-events:none;transform:translate(-50%,-50%) rotate(45deg);border-radius:2px;animation:hv .9s ease-out forwards}
+.heart::before,.heart::after{content:"";position:absolute;width:12px;height:12px;border-radius:50%;background:inherit}.heart::before{left:-6px}.heart::after{top:-6px}
+@keyframes hv{to{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) rotate(calc(45deg + var(--r))) scale(.6);opacity:0}}
+.mas{cursor:pointer}
+
+.srch{position:relative;margin-top:8px}.srch .txt{padding-right:56px}
+.fbtn{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:12px;display:grid;place-items:center;color:var(--ink)}
+.fbtn[aria-expanded=true]{background:var(--card)}
+.fbtn b{position:absolute;top:4px;right:4px;min-width:16px;height:16px;border-radius:8px;background:var(--btn);color:var(--btn-ink);font:600 11px/16px Mitr,sans-serif}
+.fpanel{background:var(--card);border-radius:20px;padding:4px 14px 12px;margin-top:8px;flex:none}
+.fpanel h4{font:500 14px Mitr,sans-serif;color:var(--mute);margin:10px 0 6px}
+.fwrap{display:flex;flex-wrap:wrap;gap:6px}
+.fwrap .chip{min-height:38px;padding:0 14px;background:var(--chip)}.fwrap .chip[aria-pressed=true],.fwrap .chip.on{background:var(--btn);color:var(--btn-ink)}
+.fwrap .chip svg.i{width:14px;height:14px;vertical-align:-2px}
+.opt span small{display:block;font-size:12.5px;color:var(--mute)}
+
+.flame{width:26px;height:26px;flex:none}
+.firebtn{gap:2px;min-height:36px;padding:0 8px;margin-left:6px;border-radius:99px;background:color-mix(in srgb,var(--card) 70%,transparent);font:600 15px Mitr,sans-serif}
+.firebtn .flame{width:22px;height:22px}
+.xpbar{display:block;height:12px;border-radius:99px;background:color-mix(in srgb,var(--card) 75%,transparent);overflow:hidden;margin:10px 0 6px}.xpbar i{display:block;height:100%;border-radius:99px;background:#f2894f}
+.xpbar.sm{height:7px;margin:5px 0 0}.mis .xpbar.sm{background:var(--chip)}
+.mis{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line)}.mis:first-of-type{border:0}
+.mis b{font-family:Mitr,sans-serif;font-weight:500}.mis>.mute{text-align:right;font-size:13px;white-space:nowrap}
+.chkc{width:28px;height:28px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;flex:none}.chkc svg{width:16px;height:16px}
+.mis.done .chkc{background:var(--ok);border-color:var(--ok);color:#1f3a28}.mis.done b{text-decoration:line-through;opacity:.7}
+.badges{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.bdg{background:var(--card);border-radius:20px;padding:12px 8px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px}
+.bdg b{font:500 14px/1.25 Mitr,sans-serif}.bdg small{font-size:12px;color:var(--mute);line-height:1.3}.bdg .xpbar{width:80%}
+.medal{width:58px;height:58px}.bdg.off b{color:var(--mute)}
+.newb{background:var(--card);border-radius:22px;padding:12px 16px 14px;margin-bottom:16px}.newb .bdg{background:none;padding:4px}
+@media(prefers-reduced-motion:no-preference){.bdg.pop .medal{animation:medalpop .7s cubic-bezier(.3,1.6,.5,1) both}@keyframes medalpop{from{transform:scale(.2) rotate(-30deg);opacity:0}}
+.flame path:first-child{transform-origin:50% 90%;animation:flick 1.2s ease-in-out infinite}@keyframes flick{50%{transform:scale(1.06,.94) skewX(3deg)}}}
+
+.helpb{width:36px;min-width:36px;height:36px;min-height:36px;margin-top:2px;background:var(--t-yellow);color:var(--ink)!important;opacity:1;font:600 17px Mitr,sans-serif}
+.demotag{font-style:normal;font-size:12px;background:var(--t-yellow);color:var(--ink);border-radius:99px;padding:1px 8px;margin-left:4px;vertical-align:2px;cursor:pointer}
+.demo{position:relative;background:var(--t-sky);border-radius:24px;padding:10px;margin-top:10px}
+.demo svg{display:block;width:100%;height:auto;max-height:300px}
+.demoplay{position:absolute;right:10px;bottom:10px;min-height:36px;padding:0 14px;background:var(--card)}
+ol.how,ul.no{margin:0;padding-left:22px;font-size:15px}ol.how li,ul.no li{margin:6px 0}
+ul.no li::marker{color:var(--red)}
+
+.mas.px{image-rendering:pixelated}
+@media(prefers-reduced-motion:no-preference){
+.mas.px .mb{animation:pxbob 1s steps(1) infinite;transform-box:view-box;transform-origin:50% 100%}
+.mas.px .pa1{animation:pxa 1s infinite}.mas.px .pa2{animation:pxb 1s infinite}
+@keyframes pxbob{50%{transform:translateY(-1px)}}
+@keyframes pxa{0%,49%{opacity:1}50%,100%{opacity:0}}@keyframes pxb{0%,49%{opacity:0}50%,100%{opacity:1}}
+.mas.px.boing .mb{animation:pxjump .5s steps(4)}
+@keyframes pxjump{25%{transform:translateY(-3px)}50%{transform:translateY(-5px)}75%{transform:translateY(-2px)}}
+}
+@media(prefers-reduced-motion:reduce){.mas.px .pa2{display:none}}
+
+.sugg{display:flex;align-items:center;gap:8px;background:var(--t-yellow);border-radius:16px;padding:6px 8px 6px 6px;margin-top:8px;font-size:14px}
+.sugg span{flex:1}.sugg button{background:var(--btn);color:var(--btn-ink);border-radius:99px;padding:0 14px;min-height:38px;font-size:14px}
+.plbtn{background:none;color:var(--mute);font-size:14px;text-decoration:underline;min-height:36px;padding:0 4px}
+
+.parade{position:absolute;left:0;right:0;bottom:calc(env(safe-area-inset-bottom) + 18px);height:64px;overflow:hidden;pointer-events:none}
+.parade span{position:absolute;bottom:0;left:0;width:56px;animation:march 14s linear infinite}
+.parade .mas{width:56px}
+@keyframes march{from{transform:translateX(-70px)}to{transform:translateX(calc(100vw + 10px))}}
+@media(prefers-reduced-motion:reduce){.parade{display:flex;justify-content:center;gap:2px}.parade span{position:static;animation:none;width:36px}.parade .mas{width:36px}}
+.onb{position:fixed;inset:0;z-index:15;background:var(--bg);display:none;flex-direction:column;align-items:center;padding:calc(env(safe-area-inset-top) + 12px) 0 calc(env(safe-area-inset-bottom) + 24px)}
+.onb.on{display:flex}
+.onbskip{align-self:flex-end;margin-right:12px}
+.onbtrack{flex:1;width:100%;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.onbtrack::-webkit-scrollbar{display:none}
+.onbslide{flex:0 0 100%;min-width:0;scroll-snap-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 32px}
+.onbpic{width:min(66vw,260px);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;margin-bottom:28px}
+.onbpic .bob{width:62%}
+.onbslide h1{font-size:26px;margin:0 0 8px}.onbslide p{font-size:16px;max-width:320px;margin:0}
+.onbdots{display:flex;gap:8px;margin:18px 0}.onbdots i{width:8px;height:8px;border-radius:4px;background:var(--line);transition:width .2s}.onbdots i.on{width:24px;background:var(--btn)}
+.onbnext{margin:0 24px}
+
+@media(prefers-reduced-motion:no-preference){.mas.angry{animation:shake .12s linear 12;filter:sepia(.6) saturate(4) hue-rotate(-30deg)}@keyframes shake{25%{transform:translateX(-3px) rotate(-3deg)}75%{transform:translateX(3px) rotate(3deg)}}}
+.mas.angry{filter:sepia(.6) saturate(4) hue-rotate(-30deg)}
+@media(max-width:400px){.hero{grid-template-columns:minmax(0,1fr) 96px}.num{font-size:26px}.sets input{font-size:16px}.rbt button{min-width:42px;padding:0 8px}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+<radialGradient id="gShade" cx="34%" cy="26%" r="85%"><stop offset=".5" stop-color="#4a2c22" stop-opacity="0"/><stop offset="1" stop-color="#4a2c22" stop-opacity=".32"/></radialGradient>
+<radialGradient id="gHi"><stop offset="0" stop-color="#fff" stop-opacity=".85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<radialGradient id="gBlush"><stop offset="0" stop-color="#ff7fa8" stop-opacity=".75"/><stop offset="1" stop-color="#ff9ec4" stop-opacity="0"/></radialGradient>
+<radialGradient id="gGround"><stop offset="0" stop-color="#3a2a40" stop-opacity=".22"/><stop offset="1" stop-color="#3a2a40" stop-opacity="0"/></radialGradient>
+<linearGradient id="gRim" x1="0" y1="0" x2="0" y2="1"><stop offset=".6" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff" stop-opacity=".35"/></linearGradient>
+<clipPath id="cp-round"><path d="M60 14c24 0 42 18 42 46 0 30-17 47-42 47S18 90 18 60c0-28 18-46 42-46z"/></clipPath>
+<clipPath id="cp-bean"><path d="M60 10c22 0 36 20 36 48 0 32-14 50-36 50S24 90 24 58c0-28 14-48 36-48z"/></clipPath>
+<clipPath id="cp-square"><path d="M32 22h56q14 0 14 14v56q0 16-16 16H34q-16 0-16-16V36q0-14 14-14z"/></clipPath>
+<clipPath id="cp-wide"><path d="M60 22c28 0 46 14 46 40 0 28-20 45-46 45S14 90 14 62c0-26 18-40 46-40z"/></clipPath>
+</defs></svg>
+<main id="app"></main>
+<div class="rest" id="rest" role="timer"><div id="rm"></div><div><span class="num" id="rt">1:30</span><p id="rl"></p></div>
+  <div class="rbt"><button data-a="r-" aria-label="ลดเวลาพัก 15 วินาที">−15</button><button data-a="r+" aria-label="เพิ่มเวลาพัก 15 วินาที">+15</button><button class="go" data-a="rskip">ไปต่อ</button></div></div>
+<nav id="nav" aria-label="เมนูหลัก"></nav>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true"><div class="panel" id="panel"></div></div>
+<div class="toast" id="toast" role="status"></div>
+<div class="cele" id="cele" role="dialog" aria-modal="true"></div>
+<div class="login" id="login" role="dialog" aria-modal="true" aria-label="เข้าสู่ระบบ"></div>
+<div class="onb" id="onb" role="dialog" aria-modal="true" aria-label="แนะนำแอป"></div>
+
+<script type="application/json" id="state">{"saved":0,"sample":true,"rest":90,"sound":true,"cheeky":true,"name":"","custom":[],"history":[],"routines":[{"id":"r1","name":"วันอก + ไตรเซ็ป","color":"pink","items":[{"ex":"Bench Press","m":"อก","sets":[{"w":40,"reps":8},{"w":40,"reps":8},{"w":40,"reps":8}]},{"ex":"Incline Dumbbell Press","m":"อก","sets":[{"w":14,"reps":10},{"w":14,"reps":10},{"w":14,"reps":10}]},{"ex":"Triceps Pushdown","m":"ไตรเซ็ป","sets":[{"w":20,"reps":12},{"w":20,"reps":12},{"w":20,"reps":12}]}]},{"id":"r2","name":"วันหลัง + ไบเซ็ป","color":"sky","items":[{"ex":"Lat Pulldown","m":"หลัง","sets":[{"w":35,"reps":10},{"w":35,"reps":10},{"w":35,"reps":10}]},{"ex":"Dumbbell Row","m":"หลัง","sets":[{"w":14,"reps":10},{"w":14,"reps":10},{"w":14,"reps":10}]},{"ex":"Barbell Curl","m":"ไบเซ็ป","sets":[{"w":15,"reps":10},{"w":15,"reps":10},{"w":15,"reps":10}]}]},{"id":"r3","name":"วันขา (วันที่เกลียดที่สุด)","color":"lime","items":[{"ex":"Squat","m":"ขา","sets":[{"w":40,"reps":8},{"w":40,"reps":8},{"w":40,"reps":8},{"w":40,"reps":8}]},{"ex":"Romanian Deadlift","m":"ขา","sets":[{"w":40,"reps":10},{"w":40,"reps":10},{"w":40,"reps":10}]},{"ex":"Lateral Raise","m":"ไหล่","sets":[{"w":6,"reps":15},{"w":6,"reps":15},{"w":6,"reps":15}]}]}],"schedule":[null,null,null,null,null,null,null],"goal":4,"body":[]}</script>
+
+<script>
+{
+const TEMPLATE = '<!DOCTYPE html>\n' + document.documentElement.outerHTML.replace(/^<html([^>]*?) data-theme="[^"]*"/, '<html$1');
+const LIB = {"อก": [["Bench Press", "เบนช์เพรส", "B"], ["Incline Bench Press", "อินคลายน์เบนช์เพรส", "B"], ["Decline Bench Press", "ดีไคลน์เบนช์เพรส", "B"], ["Dumbbell Press", "ดัมเบลเพรส", "D"], ["Incline Dumbbell Press", "อินคลายน์ดัมเบลเพรส", "D"], ["Decline Dumbbell Press", "ดีไคลน์ดัมเบลเพรส", "D"], ["Dumbbell Fly", "ดัมเบลฟลาย", "D"], ["Incline Dumbbell Fly", "อินคลายน์ดัมเบลฟลาย", "D"], ["Dumbbell Pullover", "ดัมเบลพูลโอเวอร์", "D"], ["Cable Crossover", "เคเบิลครอสโอเวอร์", "C"], ["Low-to-High Cable Fly", "เคเบิลฟลายล่างขึ้นบน", "C"], ["Chest Press Machine", "เชสต์เพรสแมชชีน", "M"], ["Pec Deck", "เพ็กเด็ก", "M"], ["Smith Machine Bench Press", "สมิทแมชชีนเบนช์เพรส", "M"], ["Push-up", "วิดพื้น", "W"], ["Incline Push-up", "วิดพื้นแบบเอียง", "W"], ["Diamond Push-up", "วิดพื้นไดมอนด์", "W"], ["Dip", "ดิป", "W"]], "หลัง": [["Deadlift", "เดดลิฟต์", "B"], ["Rack Pull", "แร็คพูล", "B"], ["Barbell Row", "บาร์เบลโรว์", "B"], ["Pendlay Row", "เพนด์เลย์โรว์", "B"], ["T-Bar Row", "ทีบาร์โรว์", "B"], ["Good Morning", "กู๊ดมอร์นิ่ง", "B"], ["Dumbbell Row", "ดัมเบลโรว์", "D"], ["Chest-Supported Row", "เชสต์ซัพพอร์ตโรว์", "D"], ["Lat Pulldown", "แลตพูลดาวน์", "C"], ["Close-Grip Lat Pulldown", "แลตพูลดาวน์มือแคบ", "C"], ["Straight-Arm Pulldown", "สเตรทอาร์มพูลดาวน์", "C"], ["Seated Cable Row", "ซีทเต็ดเคเบิลโรว์", "C"], ["Machine Row", "แมชชีนโรว์", "M"], ["Assisted Pull-up", "ดึงข้อแบบช่วย", "M"], ["Back Extension", "แบ็คเอ็กซ์เทนชัน", "M"], ["Pull-up", "ดึงข้อ", "W"], ["Chin-up", "ชินอัพ", "W"], ["Inverted Row", "อินเวิร์ทโรว์", "W"]], "ไหล่": [["Overhead Press", "โอเวอร์เฮดเพรส", "B"], ["Push Press", "พุชเพรส", "B"], ["Upright Row", "อัปไรต์โรว์", "B"], ["Barbell Shrug", "บาร์เบลชรั๊ก", "B"], ["Dumbbell Shoulder Press", "ดัมเบลชอลเดอร์เพรส", "D"], ["Arnold Press", "อาร์โนลด์เพรส", "D"], ["Lateral Raise", "ลาเทอรัลเรส", "D"], ["Front Raise", "ฟรอนต์เรส", "D"], ["Reverse Fly", "รีเวิร์สฟลาย", "D"], ["Shrug", "ชรั๊ก", "D"], ["Cable Lateral Raise", "เคเบิลลาเทอรัลเรส", "C"], ["Face Pull", "เฟซพูล", "C"], ["Machine Shoulder Press", "แมชชีนชอลเดอร์เพรส", "M"], ["Machine Lateral Raise", "แมชชีนลาเทอรัลเรส", "M"], ["Reverse Pec Deck", "รีเวิร์สเพ็กเด็ก", "M"], ["Pike Push-up", "ไพค์พุชอัพ", "W"]], "ไบเซ็ป": [["Barbell Curl", "บาร์เบลเคิร์ล", "B"], ["EZ-Bar Curl", "อีแซดบาร์เคิร์ล", "B"], ["Preacher Curl", "พรีชเชอร์เคิร์ล", "B"], ["Dumbbell Curl", "ดัมเบลเคิร์ล", "D"], ["Hammer Curl", "แฮมเมอร์เคิร์ล", "D"], ["Incline Dumbbell Curl", "อินคลายน์ดัมเบลเคิร์ล", "D"], ["Concentration Curl", "คอนเซนเทรชันเคิร์ล", "D"], ["Spider Curl", "สไปเดอร์เคิร์ล", "D"], ["Cable Curl", "เคเบิลเคิร์ล", "C"], ["Machine Bicep Curl", "แมชชีนไบเซ็ปเคิร์ล", "M"]], "ไตรเซ็ป": [["Close-Grip Bench Press", "โคลสกริปเบนช์เพรส", "B"], ["Skull Crusher", "สกัลครัชเชอร์", "B"], ["Overhead Triceps Extension", "โอเวอร์เฮดไตรเซ็ปเอ็กซ์เทนชัน", "D"], ["Triceps Kickback", "ไตรเซ็ปคิกแบ็ค", "D"], ["Triceps Pushdown", "ไตรเซ็ปพุชดาวน์", "C"], ["Rope Pushdown", "โรปพุชดาวน์", "C"], ["Cable Overhead Extension", "เคเบิลโอเวอร์เฮดเอ็กซ์เทนชัน", "C"], ["Machine Triceps Extension", "แมชชีนไตรเซ็ป", "M"], ["Bench Dip", "เบนช์ดิป", "W"]], "ปลายแขน": [["Reverse Curl", "รีเวิร์สเคิร์ล", "B"], ["Wrist Curl", "ริสต์เคิร์ล", "D"], ["Reverse Wrist Curl", "รีเวิร์สริสต์เคิร์ล", "D"], ["Farmer's Walk", "ฟาร์มเมอร์วอล์ก", "D"], ["Dead Hang", "เดดแฮง", "W"]], "ขา": [["Squat", "สควอท", "B"], ["Front Squat", "ฟรอนต์สควอท", "B"], ["Romanian Deadlift", "โรมาเนียนเดดลิฟต์", "B"], ["Stiff-Leg Deadlift", "สติฟเลกเดดลิฟต์", "B"], ["Sumo Deadlift", "ซูโม่เดดลิฟต์", "B"], ["Goblet Squat", "ก็อบเล็ตสควอท", "D"], ["Bulgarian Split Squat", "บัลแกเรียนสปลิตสควอท", "D"], ["Lunge", "ลันจ์", "D"], ["Walking Lunge", "วอล์กกิ้งลันจ์", "D"], ["Reverse Lunge", "รีเวิร์สลันจ์", "D"], ["Step-up", "สเต็ปอัพ", "D"], ["Leg Press", "เลกเพรส", "M"], ["Hack Squat", "แฮ็คสควอท", "M"], ["Smith Machine Squat", "สมิทแมชชีนสควอท", "M"], ["Leg Extension", "เลกเอ็กซ์เทนชัน", "M"], ["Leg Curl", "เลกเคิร์ล", "M"], ["Seated Leg Curl", "ซีทเต็ดเลกเคิร์ล", "M"], ["Adductor Machine", "แมชชีนหนีบขา", "M"], ["Bodyweight Squat", "สควอทตัวเปล่า", "W"], ["Nordic Curl", "นอร์ดิกเคิร์ล", "W"], ["Wall Sit", "วอลล์ซิท", "W"]], "ก้น": [["Hip Thrust", "ฮิปทรัสต์", "B"], ["Single-Leg RDL", "โรมาเนียนขาเดียว", "D"], ["Cable Kickback", "เคเบิลคิกแบ็ค", "C"], ["Abductor Machine", "แมชชีนกางขา", "M"], ["Kettlebell Swing", "เคตเทิลเบลสวิง", "K"], ["Glute Bridge", "กลูตบริดจ์", "W"], ["Frog Pump", "ฟร็อกปั๊ม", "W"], ["Donkey Kick", "ดองกี้คิก", "W"]], "น่อง": [["Calf Raise", "คาล์ฟเรส", "M"], ["Seated Calf Raise", "ซีทเต็ดคาล์ฟเรส", "M"], ["Single-Leg Calf Raise", "คาล์ฟเรสขาเดียว", "W"]], "แกนกลาง": [["Cable Crunch", "เคเบิลครันช์", "C"], ["Pallof Press", "พาลอฟเพรส", "C"], ["Woodchopper", "วู้ดช็อปเปอร์", "C"], ["Ab Wheel Rollout", "แอบโรลเลอร์", "O"], ["Plank", "แพลงก์", "W"], ["Side Plank", "ไซด์แพลงก์", "W"], ["Crunch", "ครันช์", "W"], ["Bicycle Crunch", "ไบซิเคิลครันช์", "W"], ["Sit-up", "ซิทอัพ", "W"], ["Leg Raise", "เลกเรส", "W"], ["Hanging Leg Raise", "แฮงกิ้งเลกเรส", "W"], ["Russian Twist", "รัสเซียนทวิสต์", "W"], ["Mountain Climber", "เมาเท่นไคลม์เบอร์", "W"], ["Dead Bug", "เดดบัก", "W"], ["Hollow Hold", "ฮอลโลว์โฮลด์", "W"]], "คาร์ดิโอ": [["Treadmill", "ลู่วิ่ง", "M"], ["Stationary Bike", "จักรยานปั่น", "M"], ["Rowing Machine", "เครื่องกรรเชียง", "M"], ["Elliptical", "อีลิปติคอล", "M"], ["Stair Climber", "เครื่องขึ้นบันได", "M"], ["Jump Rope", "กระโดดเชือก", "O"], ["Battle Rope", "แบทเทิลโรป", "O"], ["Running", "วิ่ง", "W"], ["Burpee", "เบอร์พี", "W"], ["Jumping Jack", "จั๊มปิ้งแจ็ค", "W"], ["High Knees", "ยกเข่าสูง", "W"]], "ทั้งตัว": [["Power Clean", "พาวเวอร์คลีน", "B"], ["Clean and Press", "คลีนแอนด์เพรส", "B"], ["Snatch", "สแนตช์", "B"], ["Thruster", "ทรัสเตอร์", "B"], ["Turkish Get-up", "เตอร์กิชเก็ตอัพ", "K"], ["Kettlebell Clean", "เคตเทิลเบลคลีน", "K"], ["Sled Push", "สเลดพุช", "O"], ["Wall Ball", "วอลล์บอล", "O"], ["Box Jump", "บ็อกซ์จั๊มป์", "W"], ["Bear Crawl", "แบร์คลอว์ล", "W"]]};
+const EQ = {B:'บาร์เบล',D:'ดัมเบล',M:'เครื่อง',C:'เคเบิล',W:'บอดี้เวท',K:'เคตเทิลเบล',O:'อื่นๆ'};
+// Thai name -> English name, for data saved before names switched to English
+const TH2EN = Object.fromEntries(Object.values(LIB).flat().map(([en,th])=>[th,en]));
+const EXINFO = Object.fromEntries(Object.entries(LIB).flatMap(([m,a])=>a.map(([en,th,eq])=>[en,{m,th,eq}])));
+const COLORS = ['yellow','lime','sky','violet','pink','orange'], CNAME = {yellow:'เหลือง',lime:'เขียว',sky:'ฟ้า',violet:'ม่วง',pink:'ชมพู',orange:'ส้ม'};
+const DOW = ['จ','อ','พ','พฤ','ศ','ส','อา'], DOWL = ['จันทร์','อังคาร','พุธ','พฤหัสฯ','ศุกร์','เสาร์','อาทิตย์'];
+const LINES = {
+  idle:[['ยังไม่ได้ยกเลยวันนี้ กล้ามเริ่มงอนแล้วนะ','โซฟาไม่ได้ช่วยให้กล้ามโตนะจ๊ะ','ลุกค่ะ ลุก ดัมเบลคิดถึง','ข้ออ้างวันนี้คืออะไร ขอฟังหน่อย'],['วันนี้พร้อมฝึกไหม ค่อยๆ ไปด้วยกันนะ','เริ่มสักนิดก็ยังดี สู้ๆ']],
+  leg:[['วันขาอีกแล้ว หนีไม่พ้นหรอก'],['วันขามาแล้ว สู้ๆ นะ']],
+  rest:[['วันพักจ้า แต่ห้ามนอนทั้งวันนะ','พักได้ กล้ามโตตอนพักนี่แหละ'],['วันพัก พักผ่อนให้เต็มที่นะ']],
+  done:[['ฝึกแล้ว! ถ่ายรูปกระจกได้ อนุญาต','วันนี้เก่งมาก ไปกินโปรตีนได้แล้ว'],['วันนี้ทำได้ดีมาก พักผ่อนเยอะๆ นะ']],
+  goal:[['อีก {n} วันก็ครบ น้องรอเยาะเย้ยอยู่นะ','ขาดอีก {n} วัน ไหวไหม'],['อีก {n} วันก็ครบเป้าแล้ว']],
+  goalDone:[['ครบเป้าแล้ว! ใครจะไปห้ามไหว'],['ครบเป้าสัปดาห์นี้แล้ว เยี่ยมมาก']],
+  restT:[['พักได้ แต่ห้ามไถฟีดนานนะ','หายใจลึกๆ อย่าเพิ่งร้องไห้','จิบน้ำ อย่าจิบชานม'],['พักหายใจสบายๆ นะ','ดื่มน้ำสักหน่อย']],
+  restEnd:[['หมดเวลาพัก! กลับไปทรมานต่อ','พอแล้ว ลุกๆๆ'],['ได้เวลาเซตต่อไปแล้ว']],
+  tick:[['อีกเซต!','สวยงาม','เหงื่อออกยัง?','แค่นี้เองเหรอ ล้อเล่นน่า'],['เก่งมาก!','ดีมาก','อีกนิดเดียว']],
+  pr:[['สถิติใหม่! ใครมาหยุดคุณได้','PR ใหม่! ไปอวดเพื่อนเลย'],['สถิติใหม่! ยินดีด้วย']],
+  finish:[['รอดมาได้! เก่งมากกก','จบแล้ว ไปนอนกองกับพื้นได้'],['เยี่ยมมาก! วันนี้ทำได้ดี']]
+};
+const SEED = Math.random();
+const say = (k,n) => { const a = LINES[k][S.cheeky===false?1:0]; return a[Math.floor((['tick','restT'].includes(k)?Math.random():SEED)*a.length)].replace('{n}',n); };
+const P = {
+  back:'<path d="M15 5l-7 7 7 7"/>',chev:'<path d="M9 5l7 7-7 7"/>',l:'<path d="M15 5l-7 7 7 7"/>',r:'<path d="M9 5l7 7-7 7"/>',
+  up:'<path d="M6 15l6-6 6 6"/>',down:'<path d="M6 9l6 6 6-6"/>',x:'<path d="M6 6l12 12M18 6L6 18"/>',
+  check:'<path d="M5 12.5l4.5 4.5L19 7.5" stroke-width="2.8"/>',copy:'<rect x="8" y="8" width="12" height="12" rx="3"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/>',
+  pencil:'<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/>',
+  link:'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>'
+};
+const ic = k => `<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[k]}</svg>`;
+function navIcon(kind, on){
+  const f = on ? {today:'var(--s-yellow)',cal:'#ff6b5b',stats:'var(--s-lime)',me:'var(--s-violet)'}[kind] : 'none';
+  const p = {today:`<rect x="4" y="5" width="16" height="15" rx="5" fill="${f}"/><path d="M9 11h.01M15 11h.01M9.5 15q2.5 2 5 0"/>`,
+    cal:`<path d="M12 3.5l2.4 5 5.4.6-4 3.7 1.1 5.3L12 15.4l-4.9 2.7 1.1-5.3-4-3.7 5.4-.6z" fill="${f}"/>`,
+    stats:`<rect x="4" y="11" width="4" height="9" rx="2" fill="${f}"/><rect x="10" y="6" width="4" height="14" rx="2" fill="${f}"/><rect x="16" y="9" width="4" height="11" rx="2" fill="${f}"/>`,
+    me:`<circle cx="12" cy="9" r="4" fill="${f}"/><path d="M5 20c1-4 4-6 7-6s6 2 7 6" fill="${f}"/>`}[kind];
+  return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+}
+/* ---------- 8-bit renderer: same gang, drawn on a 20x20 pixel grid ---------- */
+const PXPAL = {o:'#4a2c22',h:'#ffffff',c:'#ff8fb3',r:'#ff6b5b',u:'#8cc8ff',U:'#4f9be0',g:'#5fbf4a',p:'#ff9ec4',y:'#ffd36b',v:'#b49cff',k:'#2b2b2b',w:'#ffffff',t:'#ff8fa8'};
+const PXSHAPE = { round:{cx:10,cy:11,rx:8,ry:8.4}, bean:{cx:10,cy:10.6,rx:6.4,ry:9}, wide:{cx:10,cy:12,rx:9,ry:7.2}, square:{sq:[2,3,17,18,3]} };
+function pxGrid(cid, mood){
+  const C = GANG[cid] || GANG.gk, S0 = PXSHAPE[C.shape], W = 20, H = 21, g = Array.from({length:H},()=>Array(W).fill(''));
+  const inside = (x,y) => { if (S0.sq){ const [x0,y0,x1,y1,rr]=S0.sq; if (x<x0||x>x1||y<y0||y>y1) return false; const dx=Math.max(x0+rr-x,0,x-(x1-rr)), dy=Math.max(y0+rr-y,0,y-(y1-rr)); return dx*dx+dy*dy<=rr*rr+.5; }
+    return ((x-S0.cx)/S0.rx)**2+((y-S0.cy)/S0.ry)**2<=1; };
+  const cx = S0.sq ? 10 : S0.cx, top = S0.sq ? S0.sq[1] : Math.ceil(S0.cy-S0.ry), bot = S0.sq ? S0.sq[3] : Math.floor(S0.cy+S0.ry), cy = (top+bot)/2;
+  const set = (x,y,c) => { if (y>=0&&y<H&&x>=0&&x<W) g[y][x]=c; };
+  for (let y=0;y<H;y++) for (let x=0;x<W;x++) if (inside(x+.5,y+.5)) g[y][x] = 'b';
+  const isB = (x,y) => g[y]&&(g[y][x]==='b'||g[y][x]==='s');
+  const out = []; for (let y=0;y<H;y++) for (let x=0;x<W;x++) if (!g[y][x] && (isB(x-1,y)||isB(x+1,y)||isB(x,y-1)||isB(x,y+1))) out.push([x,y]); out.forEach(([x,y])=>g[y][x]='o');
+  const edge = (x,y,d) => { for (let k=1;k<=d;k++) if (g[y+k]?.[x]==='o' || g[y]?.[x+k]==='o') return true; return false; };
+  for (let y=0;y<H;y++) for (let x=0;x<W;x++) if (g[y][x]==='b') { const lx=x+.5-cx, ly=y+.5-cy; if (lx+ly>-2 && edge(x,y, lx+ly>6 ? 2 : 1)) g[y][x]='s'; }
+  // highlight + feet
+  const hx = Math.round(cx-4), hy = top+2; set(hx,hy,'h'); set(hx+1,hy,'h'); set(hx,hy+1,'h'); set(hx-1,hy+2,'h');
+  set(cx-3,bot+1,'o'); set(cx-2,bot+1,'o'); set(cx+1,bot+1,'o'); set(cx+2,bot+1,'o');
+  // face
+  const ey = Math.round(cy)-1, L = cx-3, R = cx+2;
+  const eye = {
+    happy:[[0,0,'o'],[1,-1,'o'],[2,0,'o']], proud:[[0,0,'o'],[1,-1,'o'],[2,0,'o']],
+    smug:[[0,-1,'o'],[1,-1,'o'],[2,-1,'o'],[1,0,'o']], sleep:[[0,0,'o'],[1,0,'o'],[2,0,'o']],
+    shock:[[0,-1,'o'],[1,-1,'o'],[0,0,'o'],[1,0,'o'],[1,-1,'w']], tired:[[0,-1,'o'],[1,0,'o'],[0,1,'o']]
+  }[mood];
+  eye.forEach(([dx,dy,c])=>set(L+dx-1,ey+dy,c)); eye.forEach(([dx,dy,c])=>set(R+(mood==='tired'?2-dx:dx)-0,ey+dy,c));
+  const my = ey+3;
+  ({happy:()=>{set(cx-1,my,'o');set(cx,my,'o');set(cx-1,my+1,'t');set(cx,my+1,'o');set(cx-2,my,'o');set(cx+1,my,'o');},
+    proud:()=>{for(let x=cx-2;x<=cx+1;x++)set(x,my,'o');set(cx-1,my+1,'t');set(cx,my+1,'t');set(cx-2,my+1,'o');set(cx+1,my+1,'o');},
+    smug:()=>{set(cx-1,my,'o');set(cx,my,'o');set(cx+1,my-1,'o');},
+    sleep:()=>{set(cx,my,'o');},
+    shock:()=>{set(cx-1,my,'o');set(cx,my,'o');set(cx-1,my+1,'o');set(cx,my+1,'o');},
+    tired:()=>{set(cx-2,my,'o');set(cx-1,my+1,'o');set(cx,my,'o');set(cx+1,my+1,'o');}})[mood]();
+  set(L-2,ey+2,'c'); set(L-1,ey+2,'c'); set(R+2,ey+2,'c'); set(R+3,ey+2,'c');
+  // accessory
+  const inB = (x,y) => g[y] && (g[y][x]==='b'||g[y][x]==='s'||g[y][x]==='h');
+  ({gk:()=>{ const y=top+3; for(let x=0;x<W;x++) if(inB(x,y)||inB(x,y+1)) {set(x,y,'r'); set(x,y+1,'r');} let rx=W-1; while(rx>0&&!inB(rx-1,y)) rx--; set(rx+1,y,'r');set(rx+2,y-1,'r');set(rx+2,y+1,'r'); },
+    bean:()=>{ for(let y=top;y<top+3;y++) for(let x=0;x<W;x++) if(inB(x,y)) set(x,y,'u'); for(let x=cx+3;x<cx+8;x++) set(x,top+3,'U'); set(cx,top-1,'U'); },
+    tofu:()=>{ for(let x=0;x<W;x++){ const y=top+4-Math.floor(x/7); if(inB(x,y)) set(x,y,'v'); } set(cx,top-1,'g'); set(cx+1,top-2,'g'); set(cx-1,top-2,'g'); },
+    lime:()=>{ set(cx,top-1,'g'); set(cx+1,top-2,'g'); set(cx+2,top-2,'g'); set(cx+1,top-1,'g'); const y=top+3; for(const x0 of [L-2,R]) for(let x=x0;x<x0+3;x++){ set(x,y,'k'); set(x,y+1,'k'); } set(L+1,y,'k'); set(R-1,y,'k'); set(L-1,y,'w'); set(R+1,y,'w'); },
+    berry:()=>{ for(let x=cx-6;x<=cx+5;x++) set(x,top-1,'o'); set(cx-7,top,'o'); set(cx+6,top,'o'); for(let y=Math.round(cy)-1;y<=Math.round(cy)+1;y++){ set(0,y,'p'); set(1,y,'p'); set(W-2,y,'p'); set(W-1,y,'p'); } set(cx-1,top-2,'v'); set(cx,top-2,'v'); },
+    choco:()=>{ for(let y=top+2;y<bot;y+=5) for(let x=0;x<W;x++) if(g[y][x]==='b') g[y][x]='s'; const y=top+2; for(let x=0;x<W;x++) if(inB(x,y)) set(x,y,'r'); set(cx-1,bot-2,'y'); set(cx,bot-2,'y'); set(cx-2,bot-3,'r'); set(cx+1,bot-3,'r'); },
+    cat:()=>{ for(const s of [-1,1]) { const ex = cx + s*5 - (s>0?1:0); set(ex,top-1,'o'); set(ex,top,'b'); set(ex-s,top,'o'); set(ex+s,top-1,'o'); set(ex,top-2,'o'); } for(let y=top+1;y<top+5;y+=2) for(let x=cx-1;x<=cx;x++) if(inB(x,y)) set(x,y,'s'); },
+    egg:()=>{ set(cx-2,top+4,'s'); set(cx-1,top+5,'s'); set(cx,top+4,'s'); set(cx+1,top+5,'s'); },
+    milk:()=>{ for(let x=cx-4;x<=cx+3;x++){ set(x,top-1,'o'); } for(let x=cx-3;x<=cx+2;x++) set(x,top-2,'o'); set(cx-1,top-3,'o'); set(cx,top-3,'o'); for(let x=cx-3;x<=cx+2;x++) set(x,top-1,'w'); const y=bot-4; for(let x=0;x<W;x++) if(inB(x,y)) set(x,y,'w'); }
+  })[cid]();
+  return {g, cx, cy:Math.round(cy), top, bot, fill:C.fill};
+}
+function pxRects(g, pal){
+  let s=''; for (let y=0;y<g.length;y++){ let x=0; while(x<g[y].length){ const c=g[y][x]; if(!c){x++;continue;} let n=1; while(g[y][x+n]===c) n++; s+=`<rect x="${x}" y="${y}" width="${n}" height="1" fill="${pal[c]}"/>`; x+=n; } } return s;
+}
+function pixelMascot(mood, attr, cid){
+  const id = cid || curChar(), C = GANG[id] || GANG.gk, {g, cx, cy, top} = pxGrid(id, mood);
+  const pal = Object.assign({}, PXPAL, {b:C.fill, s:`color-mix(in srgb,${C.fill} 72%,#4a2c22)`});
+  const up = mood==='happy'||mood==='proud', armL = up ? [[1,cy-1],[1,cy],[2,cy+1]] : [[1,cy+2],[1,cy+3],[2,cy+2]], armR = armL.map(([x,y])=>[19-x,y]);
+  const arms = (dy) => [...armL,...armR].map(([x,y])=>`<rect x="${x}" y="${y+dy}" width="1" height="1" fill="${PXPAL.o}"/>`).join('') + (up?`<rect x="0" y="${cy-2+dy}" width="2" height="1" fill="${PXPAL.y}"/><rect x="18" y="${cy-2+dy}" width="2" height="1" fill="${PXPAL.y}"/>`:'');
+  const extra = mood==='sleep' ? `<rect x="17" y="1" width="2" height="1" fill="${PXPAL.o}"/><rect x="18" y="2" width="1" height="1" fill="${PXPAL.o}"/><rect x="17" y="3" width="2" height="1" fill="${PXPAL.o}"/>`
+    : mood==='proud' ? `<rect x="1" y="1" width="1" height="1" fill="${PXPAL.y}"/><rect x="18" y="0" width="1" height="1" fill="${PXPAL.y}"/><rect x="0" y="2" width="1" height="1" fill="${PXPAL.y}"/>` : '';
+  return `<svg class="mas px" ${attr||''} viewBox="0 -1 20 22" shape-rendering="crispEdges" role="img" aria-label="น้อง${C.name}"><rect x="3" y="20" width="14" height="1" fill="#3a2a40" opacity=".15"/>
+    <g class="mb"><g class="pa1">${arms(0)}</g><g class="pa2">${arms(up?-1:1)}</g>${pxRects(g, pal)}${extra}</g></svg>`;
+}
+
+/* the gang: original characters, same face rig, different body + gym accessory */
+const SHAPE = {
+  round:'M60 14c24 0 42 18 42 46 0 30-17 47-42 47S18 90 18 60c0-28 18-46 42-46z',
+  bean:'M60 10c22 0 36 20 36 48 0 32-14 50-36 50S24 90 24 58c0-28 14-48 36-48z',
+  square:'M32 22h56q14 0 14 14v56q0 16-16 16H34q-16 0-16-16V36q0-14 14-14z',
+  wide:'M60 22c28 0 46 14 46 40 0 28-20 45-46 45S14 90 14 62c0-26 18-40 46-40z'
+};
+const GANG = {
+  gk:{name:'ก้อนกล้าม', tag:'สายกวน', fill:'#ffe14d', shape:'round', bg:'yellow',
+    acc:'<path d="M22 40q38-16 76 0" fill="none" stroke="#4a2c22" stroke-width="12.5"/><path d="M22 40q38-16 76 0" fill="none" stroke="#ff6b5b" stroke-width="9"/><path d="M27 37q33-12 66 0" fill="none" stroke="#fff" stroke-width="2" opacity=".55"/><path d="M97 40l11-7M97 40l12 3" fill="none" stroke="#ff6b5b" stroke-width="5"/>'},
+  bean:{name:'ถั่วชมพู', tag:'สายคาร์ดิโอ', fill:'#ffb3cf', shape:'bean', bg:'pink',
+    acc:'<path d="M28 36q32-36 64 0z" fill="#8cc8ff"/><path d="M88 34l22 4" stroke="#4f9be0" stroke-width="6"/><circle cx="60" cy="16" r="3" fill="#4f9be0"/>'},
+  tofu:{name:'เต้าหู้', tag:'สายนอน', fill:'#fffaf0', shape:'square', bg:'violet',
+    acc:'<path d="M16 44l88-12" fill="none" stroke="#b49cff" stroke-width="8"/><path d="M60 22q-2-10 6-14M60 22q4-8 12-6" fill="none" stroke="#5fbf4a"/>'},
+  lime:{name:'มะนาว', tag:'สายชิล', fill:'#c4ea70', shape:'round', bg:'lime',
+    acc:'<path d="M60 15q2-13 17-15q0 14-17 15z" fill="#5fbf4a"/><rect x="34" y="27" width="22" height="11" rx="5.5" fill="#4a2c22"/><rect x="64" y="27" width="22" height="11" rx="5.5" fill="#4a2c22"/><path d="M56 32h8"/><path d="M38 30h6" stroke="#fff" stroke-width="2"/>'},
+  berry:{name:'บลูเบอร์รี่', tag:'สายฟังเพลง', fill:'#a9bcff', shape:'wide', bg:'sky',
+    acc:'<path d="M50 24l3-9 7 6 7-6 3 9z" fill="#6b7fd6"/><path d="M16 62q0-46 44-46t44 46" fill="none" stroke-width="5"/><rect x="8" y="54" width="14" height="22" rx="7" fill="#ff9ec4"/><rect x="98" y="54" width="14" height="22" rx="7" fill="#ff9ec4"/>'},
+  cat:{name:'แมวส้ม', tag:'สายขี้อ้อน', fill:'#ffb36b', shape:'round', bg:'orange',
+    acc:'<path d="M26 34L24 12l18 10M94 34l2-22-18 10" fill="#ffb36b"/><path d="M30 26l-1-8 7 4M90 26l1-8-7 4" fill="#ff9ec4" stroke="none"/><path d="M52 22v8M60 20v9M68 22v8" fill="none" stroke-opacity=".35"/>'},
+  egg:{name:'ไข่ต้ม', tag:'สายโปรตีน', fill:'#fffaf0', shape:'bean', bg:'yellow',
+    acc:'<path d="M46 30l5 5 4-6 5 6 5-6 4 6" fill="none" stroke-opacity=".45"/>'},
+  milk:{name:'นมเย็น', tag:'สายหวาน', fill:'#ffc6dc', shape:'square', bg:'pink',
+    acc:'<path d="M32 22l10-12h36l10 12z" fill="#fff"/><path d="M18 84h84v8H18z" fill="#fff" stroke="none" opacity=".85"/>'},
+  choco:{name:'ช็อกโก', tag:'สายโค้ชดุ', fill:'#dca57a', shape:'square', bg:'orange',
+    acc:'<path d="M46 22v12M74 22v12M18 50h10M92 50h10" stroke-opacity=".35"/><path d="M28 30q32-18 64 0" fill="none" stroke="#ff6b5b" stroke-width="7"/><path d="M42 86l18 10 18-10" fill="none" stroke="#ff6b5b" stroke-width="2.5"/><rect x="54" y="94" width="12" height="8" rx="3" fill="#ffd36b"/>'}
+};
+const POKE = {gk:['จิ้มทำไม ไปยกเหล็กสิ','กล้ามแขนน้องแข็งมั้ยล่ะ','อย่าจั๊กจี้!'],bean:['วิ่งอีกรอบไหม','หัวใจเต้นแรงแล้วนะ','คาร์ดิโอคือชีวิต'],tofu:['ขอนอนอีก 5 นาที','อย่าปลุก…','นุ่มนิ่มแต่ใจแข็งนะ'],lime:['ชิลๆ ไม่ต้องรีบ','เปรี้ยวได้ แต่ห้ามขี้เกียจ','แว่นเท่มั้ย'],berry:['เพลงนี้เข้าจังหวะยกพอดี','เปิดเพลงแล้วลุย','ฟังอยู่ ไม่ได้หลับ'],choco:['อีกเซต! ห้ามเถียง','โค้ชนับนะ 3 2 1','หวานแค่หน้าตา'],cat:['เหมียว… ยกต่อสิ','ขอกอดหลังฝึกนะ','เล่นเสร็จค่อยลูบหัว'],egg:['โปรตีนมาแล้ว!','อย่าทำหล่นนะ แตกง่าย','ต้มสุกพร้อมลุย'],milk:['ฝึกเสร็จกินนมเย็นได้ 1 แก้ว','หวานแต่ไม่หยุด','ชื่นใจมั้ย']};
+let pokeN = 0, pokeT = 0;
+const poke = () => { const a = POKE[curChar()] || POKE.gk; return a[Math.floor(Math.random()*a.length)]; };
+const curStyle = () => ((S && S.profile) || {}).style || 'pixel';
+const curChar = () => ((S && S.profile) || {}).char || 'gk';
+function mascot(mood, attr, cid){
+  if (curStyle()==='pixel') return pixelMascot(mood, attr, cid);
+  const C = GANG[cid || curChar()] || GANG.gk;
+  const O='#4a2c22', eyes = {
+    happy:`<path d="M41 56q5-7 10 0M69 56q5-7 10 0" fill="none"/>`,
+    smug:`<path d="M40 54l12 2M68 56l12-2" fill="none"/><circle cx="47" cy="59" r="3.4" fill="${O}"/><circle cx="74" cy="59" r="3.4" fill="${O}"/><circle cx="48.2" cy="57.8" r="1.1" fill="#fff" stroke="none"/><circle cx="75.2" cy="57.8" r="1.1" fill="#fff" stroke="none"/>`,
+    sleep:`<path d="M41 58q5 3 10 0M69 58q5 3 10 0" fill="none"/>`,
+    shock:`<circle cx="46" cy="57" r="5.5" fill="${O}"/><circle cx="74" cy="57" r="5.5" fill="${O}"/><circle cx="47.5" cy="55" r="1.8" fill="#fff" stroke="none"/><circle cx="75.5" cy="55" r="1.8" fill="#fff" stroke="none"/>`,
+    tired:`<path d="M42 52l9 5-9 5M78 52l-9 5 9 5" fill="none"/>`,
+    proud:`<path d="M41 57q5-7 10 0M69 57q5-7 10 0" fill="none"/>`
+  }[mood], mouth = {
+    happy:`<path d="M53 69q7 10 14 0z" fill="${O}"/><ellipse cx="60" cy="74.3" rx="3.4" ry="1.6" fill="#ff8fa8" stroke="none"/>`, smug:`<path d="M54 73q8 3 13-4" fill="none"/>`,
+    sleep:`<ellipse cx="60" cy="72" rx="3.5" ry="3" fill="${O}"/>`, shock:`<ellipse cx="60" cy="74" rx="5" ry="6.5" fill="${O}"/>`,
+    tired:`<path d="M51 74q4.5-4 9 0t9 0" fill="none"/>`, proud:`<path d="M50 68q10 14 20 0z" fill="${O}"/><ellipse cx="60" cy="76.6" rx="4.6" ry="2" fill="#ff8fa8" stroke="none"/>`
+  }[mood], arms = mood==='proud'||mood==='happy' ? `<path d="M22 66q-14-6-10-24M98 66q14-6 10-24" fill="none"/><circle cx="12" cy="40" r="5" fill="#ffd36b"/><circle cx="108" cy="40" r="5" fill="#ffd36b"/>`
+    : mood==='tired'||mood==='sleep' ? `<path d="M22 78q-8 8-4 16M98 78q8 8 4 16" fill="none"/>` : `<path d="M22 72q-10 2-12 10M98 72q10 2 12 10" fill="none"/>`;
+  const extra = mood==='sleep' ? `<text x="96" y="22" font-family="Itim" font-size="18" fill="${O}" stroke="none">z</text><text x="106" y="10" font-family="Itim" font-size="13" fill="${O}" stroke="none">z</text>`
+    : mood==='shock'||mood==='tired' ? `<path d="M100 30q6 9 0 13q-6-4 0-13z" fill="#8cc8ff"/>`
+    : mood==='proud' ? `<path d="M10 14l2 6 6 2-6 2-2 6-2-6-6-2 6-2zM108 4l1.6 4.4 4.4 1.6-4.4 1.6-1.6 4.4-1.6-4.4-4.4-1.6 4.4-1.6z" fill="#ffd36b"/>` : '';
+  return `<svg class="mas" ${attr||''} viewBox="0 0 120 112" stroke="${O}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="น้อง${C.name}"><g class="mb">
+    <ellipse cx="60" cy="110" rx="34" ry="5" fill="url(#gGround)" stroke="none"/>
+    <g class="ma">${arms}</g>
+    <ellipse cx="45" cy="106" rx="8" ry="5" style="fill:color-mix(in srgb,${C.fill} 70%,#4a2c22)" stroke-width="2.6"/><ellipse cx="75" cy="106" rx="8" ry="5" style="fill:color-mix(in srgb,${C.fill} 70%,#4a2c22)" stroke-width="2.6"/>
+    <path d="${SHAPE[C.shape]}" fill="${C.fill}" stroke="none"/>
+    <g clip-path="url(#cp-${C.shape})" stroke="none">
+      <rect x="0" y="0" width="120" height="112" fill="url(#gShade)"/>
+      <rect x="0" y="0" width="120" height="112" fill="url(#gRim)"/>
+      <ellipse cx="46" cy="38" rx="22" ry="15" fill="url(#gHi)" transform="rotate(-24 46 38)"/>
+      <path d="${SHAPE[C.shape]}" fill="none" style="stroke:color-mix(in srgb,${C.fill} 55%,#4a2c22)" stroke-width="7" opacity=".3" transform="translate(4 5)"/>
+    </g>
+    <path d="${SHAPE[C.shape]}" fill="none" stroke-width="3.2"/>
+    <ellipse cx="38" cy="33" rx="5" ry="3.2" fill="#fff" stroke="none" opacity=".9" transform="rotate(-30 38 33)"/><circle cx="47" cy="28" r="1.6" fill="#fff" stroke="none"/>
+    ${C.acc}
+    <ellipse cx="37" cy="69" rx="10" ry="6.5" fill="url(#gBlush)" stroke="none"/><ellipse cx="83" cy="69" rx="10" ry="6.5" fill="url(#gBlush)" stroke="none"/>
+    <g class="me">${eyes}</g>${mouth}${extra}</g></svg>`;
+}
+function face(kind, color){
+  const e = {happy:'<path d="M13 19q2.5-3 5 0M22 19q2.5-3 5 0M15 25q5 5 10 0" fill="none"/>',
+    smile:'<circle cx="15.5" cy="18" r="1.8" fill="#5b3a2e" stroke="none"/><circle cx="24.5" cy="18" r="1.8" fill="#5b3a2e" stroke="none"/><path d="M16 25q4 3 8 0" fill="none"/>',
+    sleep:'<path d="M13 20q2.5 2 5 0M22 20q2.5 2 5 0M18 27h4" fill="none"/>', blank:''}[kind];
+  const fill = kind==='sleep' ? 'light-dark(#d8d2cc,#4a4a52)' : kind==='blank' ? 'light-dark(#ebe6e1,#2f3a4a)' : `var(--s-${color||'yellow'})`;
+  return `<svg class="face" viewBox="0 0 40 40" stroke="#5b3a2e" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="20" cy="20" r="17" style="fill:${fill}" stroke-opacity="${kind==='blank'?0:.35}"/>${e}</svg>`;
+}
+
+const $ = id => document.getElementById(id), app = $('app');
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+const fmt = n => (Math.round(n*100)/100).toLocaleString('th-TH');
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+const ls = { get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }, set(k,v){ try{ v==null?localStorage.removeItem(k):localStorage.setItem(k,JSON.stringify(v)); }catch(e){} } };
+const clock = s => { s=Math.max(0,Math.round(s)); const h=Math.floor(s/3600), m=Math.floor(s%3600/60), x=s%60; return (h?h+':'+String(m).padStart(2,'0'):m)+':'+String(x).padStart(2,'0'); };
+const dur = s => { const m=Math.max(1,Math.round(s/60)); return m<60 ? m+' นาที' : Math.floor(m/60)+' ชม. '+(m%60)+' นาที'; };
+const vol = items => items.reduce((a,it)=>a+it.sets.reduce((b,s)=>b+(s.done!==false?(+s.w||0)*(+s.reps||0):0),0),0);
+const nsets = items => items.reduce((a,it)=>a+it.sets.length,0);
+const day0 = t => { const d=new Date(t); d.setHours(0,0,0,0); return +d; };
+const weekStart = () => { const d=new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate()-((d.getDay()+6)%7)); return +d; };
+const dowToday = () => (new Date().getDay()+6)%7;
+
+let S = JSON.parse($('state').textContent), art = null;
+const cache = ls.get('wk-cache'); if (cache && Array.isArray(cache.routines)) S = cache;
+let dirty = false;
+S.routines.forEach((r,i)=>{ if(!r.color) r.color = COLORS[i%6]; });
+const toEN = list => list && list.forEach(it=>{ if (TH2EN[it.ex]) it.ex = TH2EN[it.ex]; });
+S.routines.forEach(r=>toEN(r.items)); S.history.forEach(x=>toEN(x.items));
+if (!S.schedule) S.schedule = [null,null,null,null,null,null,null];
+if (!S.goal) S.goal = 4;
+if (!S.body) S.body = [];
+if (!S.noDemo && !S.history.length) seedSample();
+let ui = ls.get('wk-ui') || {view:'today'}, W = ls.get('wk-active'); if (W) toEN(W.items); let rest = ls.get('wk-rest') || {end:0};
+if (!['today','cal','stats','me','routines','edit','workout','history','settings','body','profile','ach'].includes(ui.view) || (ui.view==='edit' && !routineById(ui.rid))) ui = {view:'today'};
+let pk = null, confirmKey = null, actx = null, ro = null, undoFn = null, opener = null;
+
+function seedSample(){
+  if (!S.routines.length) return;
+  const offs = [1,3,5,7,8,10,12,14,15,17,19,21], now = Date.now();
+  offs.forEach((o,k)=>{
+    const r = S.routines[k%S.routines.length], f = 1 - o*0.006, t = day0(now - o*864e5) + (18*3600 + (k%3)*1800)*1000;
+    S.history.push({id:'s'+k, sample:true, name:r.name, color:r.color, date:t, dur:2700+(k%4)*420,
+      items:r.items.map(it=>({ex:it.ex, m:it.m, sets:it.sets.map(s=>({w:Math.round(s.w*f/2.5)*2.5, reps:s.reps}))}))});
+  });
+}
+function touch(){ dirty = true; S.sample = false; ls.set('wk-cache', S); clearTimeout(touch.t); touch.t = setTimeout(()=>commit(), 1500); }
+async function commit(msg){
+  S.saved = Date.now(); ls.set('wk-cache', S); ls.set('wk-ui', ui); dirty = false; clearTimeout(touch.t);
+  const F = window.FB;
+  if (!F || !F.user) { if (msg) toast(msg); return; }
+  try { await F.save(F.user.uid, S); if (msg) toast(msg); }
+  catch(e){ toast('ยังไม่ได้ซิงก์ จะส่งให้อัตโนมัติเมื่อมีเน็ต'); }
+}
+function toast(m, undo){ const t=$('toast'); t.innerHTML=''; t.append(m); undoFn = undo||null; if (undo) t.insertAdjacentHTML('beforeend','<button data-a="undo">เลิกทำ</button>'); t.classList.add('on'); clearTimeout(toast.t); toast.t=setTimeout(()=>{ t.classList.remove('on'); undoFn=null; }, undo?5000:2200); }
+function go(v, extra){
+  const from = ui.view;
+  ui = Object.assign({view:v}, extra||{}); ls.set('wk-ui', ui); confirmKey=null; render(); window.scrollTo(0,0); document.body.classList.remove('sc');
+  if (from!==v && ['edit','settings','cal'].includes(from)) commit('บันทึกแล้ว');
+}
+function routineById(id){ return S.routines.find(r=>r.id===id); }
+const items = () => ui.view==='edit' ? routineById(ui.rid).items : W.items;
+function lastSets(ex){ for (const h of S.history) { const it=h.items.find(x=>x.ex===ex); if (it) return it.sets; } return null; }
+function lastNote(ex){ for (const r of S.routines) { const it=r.items.find(x=>x.ex===ex&&x.note); if (it) return it.note; } return ''; }
+function best(ex){ let b=0; for (const h of S.history) for (const it of h.items) if (it.ex===ex) for (const s of it.sets) b=Math.max(b,+s.w||0); return b; }
+function trainedDays(){ const m = new Map(); for (const h of S.history) { const k=day0(h.date); if(!m.has(k)) m.set(k,h.color||'yellow'); } return m; }
+function streak(){ const m=trainedDays(); let n=0, t=day0(Date.now()); if(!m.has(t)) t-=864e5; while(m.has(day0(t))){ n++; t=day0(t)-864e5+36e5; } return n; }
+function ssLabels(list){
+  const out = list.map(()=>''); let L = 0, i = 0;
+  while (i < list.length) { let j = i; while (j < list.length-1 && list[j].ss) j++;
+    if (j > i) { const ch = String.fromCharCode(65+L++); for (let k=i;k<=j;k++) out[k] = ch + (k-i+1); }
+    i = j + 1; }
+  return out;
+}
+const goGroupEnd = (list,i) => !list[i].ss;
+
+/* ---------- views ---------- */
+function greet(){ const hr = new Date().getHours(); return hr<5?'ยังไม่นอนอีก':hr<11?'อรุณสวัสดิ์':hr<16?'หวัดดี':hr<20?'เย็นแล้วนะ':'ดึกแล้วนะ'; }
+function vToday(){
+  const td = trainedDays(), today = day0(Date.now()), ws = weekStart(), dw = dowToday();
+  const doneToday = td.has(today), sr = routineById(S.schedule[dw]), anySched = S.schedule.some(Boolean);
+  const wkDays = [...td.keys()].filter(t=>t>=ws).length, left = Math.max(0, S.goal - wkDays);
+  let mood='smug', line=say('idle');
+  if (W) { mood='shock'; line='อ้าว ฝึกค้างไว้นี่ จะหนีไปไหน'; }
+  else if (doneToday) { mood='proud'; line=say('done'); }
+  else if (new Date().getHours()===3) { mood='sleep'; line = 'ฟี้… ฟี้… ตี 3 แล้วนะ จะยกเหล็กหรือละเมอ'; }
+  else if (new Date().getHours()>=22 || new Date().getHours()<5) { mood='sleep'; line = S.cheeky===false ? 'ดึกแล้ว พักผ่อนก่อนนะ พรุ่งนี้ค่อยลุย' : 'ดึกขนาดนี้ จะยกเหล็กหรือยกผ้าห่ม'; }
+  else if (sr && /ขา/.test(sr.name)) line = say('leg');
+  else if (!sr && anySched) { mood='sleep'; line=say('rest'); }
+  const mins = [0,0,0,0,0,0,0]; S.history.filter(h=>h.date>=ws).forEach(h=>{ mins[(new Date(h.date).getDay()+6)%7] += h.dur/60; });
+  const mx = Math.max(45,...mins), tot = mins.reduce((a,b)=>a+b,0);
+  return `<header class="top"><div><div class="mute">${new Date().toLocaleDateString('th-TH',{weekday:'long',day:'numeric',month:'long'})}</div><h1>${greet()} ${esc(S.name||'นักยก')}!</h1></div>
+    <button class="avatar" data-a="go" data-v="me" aria-label="ไปหน้าของฉัน">${mascot(doneToday?'happy':'smug')}</button></header>
+  <div class="card hero"><div style="display:flex;flex-direction:column;gap:4px">
+      <span class="badge">${W?'กำลังฝึกอยู่':sr?'ตามตาราง · '+DOWL[dw]:anySched?'วันพัก':'ยังไม่ได้จัดตาราง'}</span>
+      <h2>${W?esc(W.name):sr?esc(sr.name):anySched?'วันพัก':'วันนี้เล่นอะไรดี'}</h2>
+      <div class="bubble">${esc(line)}</div>
+      <div class="row" style="flex-wrap:wrap;gap:4px">${W?`<button class="pri" data-a="go" data-v="workout">ฝึกต่อ</button>`:sr?`<button class="pri" data-a="start" data-r="${sr.id}">${doneToday?'ฝึกอีกรอบ':'เริ่มฝึก'}</button><button class="ghost" data-a="choose">เล่นอย่างอื่น</button>`
+        :`<button class="pri" data-a="choose">เลือกโปรแกรม</button>${anySched?'':'<button class="ghost" data-a="go" data-v="cal">จัดตาราง</button>'}`}</div></div>
+    <div class="bob">${mascot(mood)}</div></div>
+  <div class="card tint t-lime"><div class="row sp"><h2>สัปดาห์นี้</h2><button class="row firebtn" data-a="go" data-v="ach" aria-label="ไฟติดกัน ${streak()} วัน ดูความสำเร็จ">${flameSvg(streak())}<b>${streak()}</b></button><span style="flex:1"></span><span class="flag">${Math.min(wkDays,S.goal)} / ${S.goal} วัน</span></div>
+    <div class="week">${DOW.map((d,i)=>{ const t=day0(ws+i*864e5+36e5);
+      const k = td.has(t)?face(i%2?'smile':'happy',td.get(t)) : t<today?face('sleep') : face('blank');
+      return `<div>${k}<span style="${t===today?'color:var(--ink);text-decoration:underline 2px':''}">${d}</span></div>`; }).join('')}</div>
+    <div class="goalbar"><div class="segs">${Array.from({length:S.goal},(_,i)=>`<i class="${i<wkDays?'on':''}"></i>`).join('')}</div></div>
+    <div class="mute" style="margin-top:6px">${esc(left?say('goal',left):say('goalDone'))} · ติดกัน ${streak()} วัน</div></div>
+  <div class="card tint t-orange grow"><div class="row" style="align-items:flex-end;gap:18px"><div><div class="mute">เวลาฝึกสัปดาห์นี้</div><div class="num">${tot>=60?Math.floor(tot/60)+' <small>ชม.</small> ':''}${Math.round(tot%60)} <small>นาที</small></div></div>
+    <div><div class="mute">วันนี้</div><div class="num">${Math.round(mins[dw])} <small>นาที</small></div></div><div style="flex:1"></div>
+    ${W?'':'<button class="pri" style="min-height:44px;padding:0 16px" data-a="startEmpty">จับเวลา</button>'}</div>
+    <div class="bars">${mins.map((m,i)=>`<div class="${i===dw?'today':''} ${m?'':'zero'}" title="${Math.round(m)} นาที"><i style="height:${Math.max(7,m/mx*100)}%"></i>${DOW[i]}</div>`).join('')}</div></div>
+  <button class="card linkrow" data-a="go" data-v="routines"><span><b>โปรแกรมของฉัน</b><small>${S.routines.length} โปรแกรม · แตะดินสอเพื่อแก้</small></span>${ic('chev')}</button>
+  ${S.history.some(x=>x.sample)?`<p class="note">ประวัติเป็นข้อมูลตัวอย่าง <button data-a="clearSample">ล้าง</button></p>`:''}`;
+}
+/* ---------- achievements, XP, missions ---------- */
+const realH = () => S.history.filter(h=>!h.sample);
+function weekOf(t){ const d=new Date(t); d.setHours(0,0,0,0); d.setDate(d.getDate()-((d.getDay()+6)%7)); return +d; }
+function stats(){
+  const H = realH(), days = [...new Set(H.map(h=>day0(h.date)))].sort((a,b)=>a-b);
+  let best=0, run=0, prev=0; for (const d of days){ run = prev && Math.round((d-prev)/864e5)===1 ? run+1 : 1; best=Math.max(best,run); prev=d; }
+  const wk = {}; H.forEach(h=>{ const w=weekOf(h.date); (wk[w]=wk[w]||new Set()).add(day0(h.date)); });
+  const met = Object.keys(wk).map(Number).sort((a,b)=>a-b).filter(w=>wk[w].size>=S.goal);
+  let wrun=0, wbest=0, wp=0; for (const w of met){ wrun = wp && Math.round((w-wp)/(7*864e5))===1 ? wrun+1 : 1; wbest=Math.max(wbest,wrun); wp=w; }
+  const groups = Math.max(0,...Object.values(H.reduce((a,h)=>{ const w=weekOf(h.date); (a[w]=a[w]||new Set()); h.items.forEach(i=>a[w].add(i.m)); return a; },{})).map(s=>s.size));
+  return { n:H.length, best, cur:streak(), vol:H.reduce((a,h)=>a+vol(h.items),0), sets:H.reduce((a,h)=>a+nsets(h.items),0), pr:H.reduce((a,h)=>a+(h.pr||0),0),
+    early:H.some(h=>new Date(h.date).getHours()<7), late:H.some(h=>new Date(h.date).getHours()>=21), ss:H.some(h=>h.ss), weeks:met.length, wbest, groups, body:S.body.length };
+}
+const BADGES = [
+  {id:'first', name:'ก้าวแรก', desc:'ฝึกครั้งแรก', g:'star', tier:0, v:s=>s.n, goal:1},
+  {id:'fire3', name:'ไฟติด', desc:'ฝึกติดกัน 3 วัน', g:'flame', tier:0, v:s=>s.best, goal:3},
+  {id:'fire7', name:'ไฟลุก', desc:'ฝึกติดกัน 7 วัน', g:'flame', tier:1, v:s=>s.best, goal:7},
+  {id:'fire14', name:'ไฟแรงไม่หยุด', desc:'ฝึกติดกัน 14 วัน', g:'flame', tier:2, v:s=>s.best, goal:14},
+  {id:'fire30', name:'ไฟนิรันดร์', desc:'ฝึกติดกัน 30 วัน', g:'flame', tier:3, v:s=>s.best, goal:30},
+  {id:'w10', name:'ขาประจำยิม', desc:'ฝึกครบ 10 ครั้ง', g:'dumb', tier:0, v:s=>s.n, goal:10},
+  {id:'w25', name:'ตัวจริงเสียงจริง', desc:'ฝึกครบ 25 ครั้ง', g:'dumb', tier:1, v:s=>s.n, goal:25},
+  {id:'w50', name:'ยิมคือบ้าน', desc:'ฝึกครบ 50 ครั้ง', g:'dumb', tier:2, v:s=>s.n, goal:50},
+  {id:'w100', name:'ตำนานยิม', desc:'ฝึกครบ 100 ครั้ง', g:'dumb', tier:3, v:s=>s.n, goal:100},
+  {id:'v10', name:'ยกไป 10 ตัน', desc:'ปริมาณรวม 10,000 กก.', g:'bolt', tier:0, v:s=>s.vol, goal:10000},
+  {id:'v100', name:'ยกเท่าวาฬ', desc:'ปริมาณรวม 100,000 กก.', g:'bolt', tier:2, v:s=>s.vol, goal:100000},
+  {id:'pr1', name:'ทำลายสถิติ', desc:'ทำ PR ครั้งแรก', g:'trophy', tier:0, v:s=>s.pr, goal:1},
+  {id:'pr10', name:'นักล่า PR', desc:'ทำ PR รวม 10 ท่า', g:'trophy', tier:2, v:s=>s.pr, goal:10},
+  {id:'goal1', name:'ครบเป้า', desc:'ฝึกครบเป้าใน 1 สัปดาห์', g:'target', tier:0, v:s=>s.weeks, goal:1},
+  {id:'goal4', name:'วินัยเหล็ก', desc:'ครบเป้า 4 สัปดาห์ติด', g:'target', tier:2, v:s=>s.wbest, goal:4},
+  {id:'all', name:'ครบทุกส่วน', desc:'ฝึก 5 ส่วนขึ้นไปในสัปดาห์เดียว', g:'body', tier:1, v:s=>s.groups, goal:5},
+  {id:'ss', name:'คู่หูซูเปอร์เซ็ต', desc:'จบการฝึกที่มีซูเปอร์เซ็ต', g:'link', tier:0, v:s=>s.ss?1:0, goal:1},
+  {id:'early', name:'นกตื่นเช้า', desc:'เริ่มฝึกก่อน 7 โมง', g:'sun', tier:1, v:s=>s.early?1:0, goal:1},
+  {id:'late', name:'นกฮูกยิม', desc:'เริ่มฝึกหลัง 3 ทุ่ม', g:'moon', tier:1, v:s=>s.late?1:0, goal:1},
+  {id:'body5', name:'รู้จักร่างกาย', desc:'บันทึกร่างกาย 5 ครั้ง', g:'scale', tier:0, v:s=>s.body, goal:5}
+];
+const TIER = [['#e8a36b','#c97a3c'],['#dfe6ee','#9aa8b8'],['#ffd36b','#e0a020'],['#b49cff','#7f5fe0']];
+const GLYPH = {
+  star:'<path d="M20 9l3.2 6.5 7.1 1-5.2 5 1.3 7.1L20 25.3l-6.4 3.3 1.3-7.1-5.2-5 7.1-1z"/>',
+  flame:'<path d="M20 8c1 5 7 7 7 14a7 7 0 0 1-14 0c0-4 2-6 4-8 0 3 1 4 3 5 0-4-2-7 0-11z"/>',
+  dumb:'<path d="M12 15v10M9 17v6M28 15v10M31 17v6M12 20h16" fill="none" stroke-width="3"/>',
+  bolt:'<path d="M22 8l-9 13h6l-2 11 9-14h-6z"/>',
+  trophy:'<path d="M14 10h12v5a6 6 0 0 1-12 0zM18 21h4v5h-4zM15 28h10v2H15z"/><path d="M14 12h-3a3 3 0 0 0 3 5M26 12h3a3 3 0 0 1-3 5" fill="none" stroke-width="2"/>',
+  target:'<circle cx="20" cy="20" r="10" fill="none" stroke-width="2.5"/><circle cx="20" cy="20" r="5" fill="none" stroke-width="2.5"/><circle cx="20" cy="20" r="1.8"/>',
+  body:'<circle cx="20" cy="11" r="3"/><path d="M13 17h14M20 15v8M20 23l-4 7M20 23l4 7" fill="none" stroke-width="2.6"/>',
+  link:'<path d="M17 23a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M23 17a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1" fill="none" stroke-width="2.6"/>',
+  sun:'<circle cx="20" cy="20" r="5"/><path d="M20 9v3M20 28v3M9 20h3M28 20h3M12 12l2 2M26 26l2 2M12 28l2-2M26 14l2-2" fill="none" stroke-width="2.4"/>',
+  moon:'<path d="M24 10a10 10 0 1 0 6 16 8 8 0 0 1-6-16z"/>',
+  scale:'<rect x="11" y="11" width="18" height="18" rx="5" fill="none" stroke-width="2.4"/><path d="M16 18a6 6 0 0 1 8 0M20 18l2-2" fill="none" stroke-width="2.4"/>'
+};
+function medal(b, on){
+  const [c1,c2] = on ? TIER[b.tier] : ['light-dark(#e9e4df,#2f3a4a)','light-dark(#cfc7bf,#465266)'];
+  return `<svg viewBox="0 0 40 40" class="medal${on?'':' off'}" aria-hidden="true"><circle cx="20" cy="20" r="18" style="fill:${c1};stroke:${c2}" stroke-width="2.5"/><circle cx="20" cy="20" r="13.5" fill="none" style="stroke:${c2}" stroke-width="1" stroke-dasharray="2 2"/><g fill="${on?'#4a2c22':'#a59c94'}" stroke="${on?'#4a2c22':'#a59c94'}" stroke-linecap="round" stroke-linejoin="round">${on?GLYPH[b.g]:'<text x="20" y="25.5" text-anchor="middle" font-size="15" font-family="Mitr" stroke="none">?</text>'}</g></svg>`;
+}
+function flameSvg(n){
+  const c = n>=30?['#b49cff','#7f5fe0']:n>=7?['#8cc8ff','#3f86e0']:n>=3?['#ffab5e','#ff6b5b']:n>=1?['#ffd36b','#f2894f']:['#d8d2cc','#b8b0a8'];
+  return `<svg class="flame" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c1 4 6 6 6 12a6 6 0 0 1-12 0c0-3 1.5-5 3.5-7 0 2.5 1 3.5 2.5 4 0-3.5-1.5-6 0-9z" fill="${c[0]}" stroke="${c[1]}" stroke-width="1.5" stroke-linejoin="round"/><path d="M12 13c.5 2 2.5 3 2.5 5a2.5 2.5 0 0 1-5 0c0-1.5 1-2.5 2.5-5z" fill="#fff" opacity=".7"/></svg>`;
+}
+function xpOf(){ const s = stats(); return realH().reduce((a,h)=>a+50+nsets(h.items)*2+(h.pr||0)*20,0) + Object.keys(S.ach||{}).length*30 + (S.mdone||[]).length*40; }
+function level(xp){ let lv=1, need=150, base=0; while (xp >= base+need){ base+=need; lv++; need=Math.round(need*1.25); } return {lv, cur:xp-base, need}; }
+const LVNAME = ['มือใหม่หัดยก','ขาจร','ขาประจำ','สายแข็ง','กล้ามเริ่มขึ้น','นักยกตัวจริง','เทพยิม','ตำนาน'];
+function missions(){
+  const ws = weekStart(), H = realH().filter(h=>h.date>=ws), days = new Set(H.map(h=>day0(h.date))).size;
+  const sets = H.reduce((a,h)=>a+nsets(h.items),0), legs = H.some(h=>h.items.some(i=>['ขา','ก้น','น่อง'].includes(i.m))), bodyLog = S.body.some(b=>b.date>=ws);
+  const id = k => k+'-'+ws;
+  return [
+    {id:id('days'), name:`ฝึกให้ครบ ${S.goal} วัน`, v:days, goal:S.goal, xp:100},
+    {id:id('sets'), name:'เก็บให้ได้ 40 เซต', v:sets, goal:40, xp:60},
+    {id:id('legs'), name:'ฝึกขาสักครั้ง (หนีไม่พ้น)', v:legs?1:0, goal:1, xp:40},
+    {id:id('body'), name:'บันทึกน้ำหนักตัว', v:bodyLog?1:0, goal:1, xp:30}
+  ];
+}
+/* record newly unlocked badges + finished missions; returns the new badges */
+function checkAch(){
+  S.ach = S.ach || {}; S.mdone = S.mdone || [];
+  const s = stats(), fresh = [];
+  BADGES.forEach(b=>{ if (!S.ach[b.id] && b.v(s) >= b.goal) { S.ach[b.id] = Date.now(); fresh.push(b); } });
+  missions().forEach(m=>{ if (m.v>=m.goal && !S.mdone.includes(m.id)) S.mdone.push(m.id); });
+  return fresh;
+}
+function vAch(){
+  const s = stats(), xp = xpOf(), L = level(xp), got = BADGES.filter(b=>(S.ach||{})[b.id]).length, M = missions();
+  return `<header class="top"><button class="ghost" data-a="go" data-v="me" style="margin-left:-8px">${ic('back')}ฉัน</button></header><h1 style="margin-bottom:12px">ความสำเร็จ</h1>
+  <div class="card tint t-yellow"><div class="row sp"><div><div class="mute">เลเวล ${L.lv} · ${LVNAME[Math.min(L.lv-1,LVNAME.length-1)]}</div><div class="num">${fmt(xp)} <small>XP</small></div></div><div class="row" style="gap:6px">${flameSvg(s.cur)}<div><div class="num" style="font-size:24px">${s.cur}</div><small class="mute">วันติดกัน</small></div></div></div>
+    <div class="xpbar"><i style="width:${L.cur/L.need*100}%"></i></div><div class="mute" style="font-size:13px">อีก ${fmt(L.need-L.cur)} XP ถึงเลเวล ${L.lv+1} · ติดกันนานสุด ${s.best} วัน</div></div>
+  <div class="card"><div class="row sp"><h2>มิชชั่นสัปดาห์นี้</h2><span class="mute">รีเซ็ตทุกวันจันทร์</span></div>
+    ${M.map(m=>{ const done = m.v>=m.goal; return `<div class="mis${done?' done':''}"><span class="chkc">${done?ic('check'):''}</span><span style="flex:1"><b>${esc(m.name)}</b><span class="xpbar sm"><i style="width:${Math.min(1,m.v/m.goal)*100}%"></i></span></span><span class="mute">${Math.min(m.v,m.goal)}/${m.goal}<br><b style="color:var(--ink)">+${m.xp}</b></span></div>`; }).join('')}</div>
+  <div class="row sp" style="margin:16px 2px 8px"><h2>เหรียญ</h2><span class="mute">ปลดล็อก ${got}/${BADGES.length}</span></div>
+  <div class="badges">${BADGES.map(b=>{ const on = !!(S.ach||{})[b.id], v = Math.min(b.v(s), b.goal); return `<div class="bdg${on?'':' off'}">${medal(b,on)}<b>${esc(b.name)}</b><small>${on?new Date(S.ach[b.id]).toLocaleDateString('th-TH',{day:'numeric',month:'short'}):esc(b.desc)}</small>${on?'':`<span class="xpbar sm"><i style="width:${v/b.goal*100}%"></i></span>`}</div>`; }).join('')}</div>`;
+}
+
+function vRoutines(){
+  return `<header class="top"><button class="ghost" data-a="go" data-v="today" style="margin-left:-8px">${ic('back')}วันนี้</button></header><h1 style="margin-bottom:14px">โปรแกรม</h1>`+
+    S.routines.map(r=>{ const lb = ssLabels(r.items); return `<div class="card tint t-${r.color}"><div class="row sp"><h2 style="font-weight:600;font-size:20px">${esc(r.name||'โปรแกรมไม่มีชื่อ')}</h2><div class="row" style="gap:0"><button class="ic" data-a="dup" data-r="${r.id}" aria-label="ทำสำเนา">${ic('copy')}</button><button class="ic pen" data-a="edit" data-r="${r.id}" aria-label="แก้ไขโปรแกรม">${ic('pencil')}</button></div></div>
+      <div class="mute">${r.items.length} ท่า · ${nsets(r.items)} เซต${r.items.some(i=>i.ss)?' · มีซูเปอร์เซ็ต':''}</div>
+      <div class="chips">${r.items.map((i,k)=>`<span class="tag">${lb[k]?lb[k]+' ':''}${esc(i.ex)}</span>`).join('')||'<span class="tag">ยังว่างอยู่</span>'}</div>
+      <button class="pri wide" data-a="start" data-r="${r.id}">เริ่มฝึก</button></div>`; }).join('')+
+    `<button class="pri wide" style="min-height:54px;margin-top:6px" data-a="newR">+ สร้างโปรแกรมใหม่</button>`;
+}
+function setTable(it, i, live){
+  const prev = live ? lastSets(it.ex) : null;
+  return `<table class="sets"><thead><tr><th>เซต</th>${live?'<th>ครั้งก่อน</th>':''}<th>กก.</th><th>ครั้ง</th><th aria-label="${live?'เสร็จ':'ลบ'}"></th></tr></thead><tbody>`+
+    it.sets.map((s,j)=>`<tr class="${live&&s.done?'done':''}"><td>${j+1}${s.pr?'<span class="prb">PR</span>':''}</td>${live?`<td class="prev">${prev&&prev[j]?fmt(prev[j].w)+'×'+prev[j].reps:'–'}</td>`:''}
+      <td><input type="text" inputmode="decimal" autocomplete="off" data-f="w" data-i="${i}" data-j="${j}" value="${s.w}" placeholder="0" aria-label="น้ำหนักเซต ${j+1}"></td>
+      <td><input type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" data-f="reps" data-i="${i}" data-j="${j}" value="${s.reps}" placeholder="0" aria-label="จำนวนครั้งเซต ${j+1}"></td>
+      <td>${live?`<button class="chk" data-a="tick" data-i="${i}" data-j="${j}" aria-pressed="${!!s.done}" aria-label="ทำเซต ${j+1} เสร็จ">${ic('check')}</button>`:`<button class="ic" data-a="setDel" data-i="${i}" data-j="${j}" aria-label="ลบเซต ${j+1}">${ic('x')}</button>`}</td></tr>`).join('')+
+    `</tbody></table><button class="addset" data-a="setAdd" data-i="${i}">+ เพิ่มเซต</button>`;
+}
+function exBlocks(list, live){
+  const lb = ssLabels(list); let sg;
+  return list.map((it,i)=>`<div class="card"><div class="exh"><h3>${lb[i]?`<span class="ss">${lb[i]}</span>`:''}${esc(it.ex)}<small>${esc(it.m)}</small></h3>
+    ${DEMO[it.ex]?`<button class="ic helpb" data-a="demo" data-x="${esc(it.ex)}" aria-label="ดูวิธีเล่น ${esc(it.ex)}">?</button>`:''}
+    <button class="ic" data-a="exUp" data-i="${i}" aria-label="เลื่อนขึ้น" ${i?'':'disabled'}>${ic('up')}</button>
+    <button class="ic" data-a="exDown" data-i="${i}" aria-label="เลื่อนลง" ${i<list.length-1?'':'disabled'}>${ic('down')}</button>
+    <button class="ic" data-a="exDel" data-i="${i}" aria-label="ลบท่า">${ic('x')}</button></div>
+    ${live && (sg = suggest(it)) ? `<div class="sugg">${mascot('happy','style="width:34px"')}<span>ครั้งก่อนทำครบ ลอง <b>${fmt(sg)} กก.</b> ไหวป่าว</span><button data-a="useSug" data-i="${i}" data-w="${sg}">ใช้เลย</button></div>`:''}
+    ${setTable(it,i,live)}
+    ${(EXINFO[it.ex]||{}).eq==='B'?`<button class="plbtn" data-a="plates" data-i="${i}">ใส่แผ่นยังไง</button>`:''}
+    <input class="notein" data-f="note" data-i="${i}" value="${esc(it.note||'')}" placeholder="โน้ตท่านี้ เช่น ตั้งเบาะเลข 4, ศอกชิดตัว" aria-label="โน้ตของท่า ${esc(it.ex)}">
+    ${i<list.length-1?`<div class="exfoot"><button data-a="ssTog" data-i="${i}" aria-pressed="${!!it.ss}">${ic('link')} ${it.ss?'ซูเปอร์เซ็ตกับท่าถัดไปแล้ว':'จับคู่ซูเปอร์เซ็ตกับท่าถัดไป'}</button></div>`:''}
+    </div>${it.ss&&i<list.length-1?`<div class="sslink">${ic('link')} เล่นต่อกันทันที ไม่ต้องพัก</div>`:''}`).join('');
+}
+function vEdit(){
+  const r = routineById(ui.rid);
+  return `<header class="top"><button class="ghost" data-a="go" data-v="routines" style="margin-left:-8px">${ic('back')}โปรแกรม</button><button class="pri" style="min-height:44px" data-a="go" data-v="routines">เสร็จแล้ว</button></header>
+    <input class="rname" data-f="rname" value="${esc(r.name)}" placeholder="ตั้งชื่อ เช่น วันอกล้วน" aria-label="ชื่อโปรแกรม">
+    <div class="sw" role="group" aria-label="สีการ์ด">${COLORS.map(c=>`<button style="background:var(--s-${c})" data-a="color" data-c="${c}" aria-pressed="${r.color===c}" aria-label="สี${CNAME[c]}"></button>`).join('')}</div>
+    ${r.items.length?exBlocks(r.items,false):`<div class="card empty">${mascot('sleep')}<b>ยังไม่มีท่าเลย</b><span class="mute">ว่างจนน้องหลับไปแล้ว กดเพิ่มท่าหน่อย</span></div>`}
+    <button class="pri wide" style="min-height:54px" data-a="pick">+ เพิ่มท่า</button>
+    <button class="danger wide" data-a="delR">${confirmKey==='delR'?'แน่ใจนะ? แตะอีกทีเพื่อลบ':'ลบโปรแกรมนี้'}</button>`;
+}
+function wDone(){ return W.items.reduce((a,it)=>a+it.sets.filter(s=>s.done).length,0); }
+function vWorkout(){
+  if (!W) return `<header class="top"><button class="ghost" data-a="go" data-v="today" style="margin-left:-8px">${ic('back')}วันนี้</button></header><h1 style="margin-bottom:14px">เลือกโปรแกรม</h1>`+chooser();
+  const done = wDone(), all = nsets(W.items), pct = all?done/all*100:0;
+  return `<div class="wtop"><div class="row"><button class="ic" data-a="go" data-v="today" aria-label="ย่อหน้าฝึก" style="margin-left:-10px;color:var(--ink)">${ic('down')}</button><h1 style="flex:1;font-size:22px">${esc(W.name)}</h1><button class="pri" style="min-height:44px" data-a="finish">จบการฝึก</button></div>
+    <div class="meta"><span>เวลา <b id="el">${clock((Date.now()-W.start)/1000)}</b></span><span>เซต <b id="ws">${done}/${all}</b></span><span>ปริมาณ <b id="wv">${fmt(vol(W.items.map(it=>({sets:it.sets.filter(s=>s.done)}))))}</b> กก.</span></div>
+    <div class="track"><i id="wp" style="width:${pct}%"></i><span id="wm">${mascot(pct>=100?'proud':pct>50?'tired':'happy','style="left:'+pct+'%"')}</span></div></div>
+    ${W.items.length?exBlocks(W.items,true):`<div class="card empty">${mascot('smug')}<b>ยังไม่มีท่า</b><span class="mute">เพิ่มท่าแล้วลุยเลย</span></div>`}
+    <button class="sec wide" style="min-height:54px" data-a="pick">+ เพิ่มท่า</button>
+    <button class="danger wide" data-a="cancelW">${confirmKey==='cancelW'?'จะหนีจริงดิ? แตะอีกทีถ้าแน่ใจ':'ยกเลิกการฝึก'}</button>`;
+}
+function chooser(){
+  return S.routines.map(r=>`<button class="card tint t-${r.color} pick" data-a="start" data-r="${r.id}"><span style="width:44px;flex:none">${face('happy',r.color)}</span><span><b>${esc(r.name||'โปรแกรมไม่มีชื่อ')}</b><small>${r.items.length} ท่า · ${nsets(r.items)} เซต</small></span></button>`).join('')+
+    `<button class="new" data-a="startEmpty">+ เริ่มแบบว่าง แล้วเพิ่มท่าระหว่างเล่น</button>`;
+}
+function histCard(x){
+  return `<details class="card tint t-${x.color||'yellow'}"><summary><div class="hd">${face('happy',x.color)}<div><h3>${esc(x.name)}</h3><small>${new Date(x.date).toLocaleDateString('th-TH',{weekday:'short',day:'numeric',month:'short'})} · ${dur(x.dur)}</small></div></div>
+    <div class="hv"><b>${fmt(vol(x.items))} กก.</b>${nsets(x.items)} เซต${x.pr?` · PR ${x.pr}`:''}</div></summary>
+    <ul class="hx">${x.items.map(it=>`<li><b>${esc(it.ex)}</b>${it.sets.map(s=>fmt(s.w)+'×'+s.reps).join('  ·  ')}</li>`).join('')}</ul>
+    <button class="danger" data-a="hDel" data-h="${x.id}">${confirmKey==='h'+x.id?'แตะอีกทีเพื่อลบ':'ลบรายการนี้'}</button></details>`;
+}
+function vCal(){
+  const base = new Date(); base.setDate(1); base.setMonth(base.getMonth()+(ui.cm||0));
+  const y = base.getFullYear(), mo = base.getMonth(), first = (base.getDay()+6)%7, days = new Date(y,mo+1,0).getDate(), td = trainedDays(), today=day0(Date.now()), dw=dowToday();
+  const rows = Math.ceil((first+days)/7), sel = ui.cd || today;
+  let cells = '<span></span>'.repeat(first);
+  for (let d=1; d<=days; d++){ const t=+new Date(y,mo,d); cells += `<button class="${t===today?'td':''} ${sel===t?'sel':''}" data-a="cday" data-t="${t}" aria-label="วันที่ ${d}${td.has(t)?' ฝึกแล้ว':''}">${td.has(t)?face('happy',td.get(t)):''}<span>${d}</span></button>`; }
+  const dayList = S.history.filter(h=>day0(h.date)===sel);
+  const sr = routineById(S.schedule[(new Date(sel).getDay()+6)%7]);
+  return `<header class="top"><h1>ปฏิทิน</h1><button class="sec" style="min-height:40px" data-a="go" data-v="history">ประวัติทั้งหมด</button></header>
+  <div class="card tint t-sky"><div class="row sp"><h2>ตารางประจำสัปดาห์</h2><span class="mute row" style="gap:4px">${ic('pencil')}แตะวันเพื่อแก้</span></div>
+    <div class="sched">${DOW.map((d,i)=>{ const r=routineById(S.schedule[i]); return `<button class="${i===dw?'td':''}" style="${r?`background:var(--s-${r.color});color:#4a2c22`:''}" data-a="schedDay" data-d="${i}" aria-label="วัน${DOWL[i]}: ${r?esc(r.name):'พัก'}">${d}<small style="${r?'color:#4a2c22':''}">${r?esc(r.name):'พัก'}</small></button>`; }).join('')}</div></div>
+  <div class="card grow"><div class="row sp"><button class="ic" data-a="cm" data-d="-1" aria-label="เดือนก่อน">${ic('l')}</button>
+    <h2>${base.toLocaleDateString('th-TH',{month:'long',year:'numeric'})}</h2><button class="ic" data-a="cm" data-d="1" aria-label="เดือนถัดไป" ${(ui.cm||0)>=0?'disabled':''}>${ic('r')}</button></div>
+    <div class="calh">${DOW.map(d=>`<b>${d}</b>`).join('')}</div>
+    <div class="cal" style="grid-template-rows:repeat(${rows},minmax(30px,1fr))">${cells}</div></div>
+  <div class="card dayrow">${dayList.length ? `<button class="linkrow" data-a="go" data-v="history" style="padding:0">${face('happy',dayList[0].color)}<span><b>${esc(dayList[0].name)}${dayList.length>1?` +${dayList.length-1}`:''}</b><small>${new Date(sel).toLocaleDateString('th-TH',{weekday:'short',day:'numeric',month:'short'})} · ${dur(dayList[0].dur)} · ${fmt(vol(dayList[0].items))} กก.</small></span>${ic('chev')}</button>`
+    : `<div class="linkrow" style="padding:0">${face(sel>today?'blank':'sleep')}<span><b>${sel>today?(sr?'แผน: '+esc(sr.name):'วันพัก'):sel===today?'วันนี้ยังไม่ได้ฝึก':'ไม่ได้ฝึกวันนี้'}</b><small>${new Date(sel).toLocaleDateString('th-TH',{weekday:'long',day:'numeric',month:'short'})}</small></span></div>`}</div>`;
+}
+function vHistory(){
+  return `<header class="top"><button class="ghost" data-a="go" data-v="cal" style="margin-left:-8px">${ic('back')}ปฏิทิน</button></header><h1 style="margin-bottom:14px">ประวัติการฝึก</h1>`+
+    (S.history.length ? S.history.map(histCard).join('') : `<div class="card empty">${mascot('sleep')}<b>ยังว่างเปล่า</b><span class="mute">เริ่มฝึกสักทีสิ</span></div>`);
+}
+function vStats(){
+  const H = S.history;
+  if (!H.length) return `<header class="top"><h1>สถิติ</h1></header><div class="card empty grow" style="justify-content:center">${mascot('sleep')}<b>ยังไม่มีอะไรให้ดู</b><span class="mute">ฝึกก่อนแล้วกราฟจะขึ้นเอง</span></div>`;
+  const cnt = {}; H.forEach(h=>h.items.forEach(it=>cnt[it.ex]=(cnt[it.ex]||0)+1));
+  const exs = Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a]); if (!ui.sx || !cnt[ui.sx]) ui.sx = exs[0];
+  const pts = H.filter(h=>h.items.some(i=>i.ex===ui.sx)).map(h=>({d:h.date, v:Math.max(...h.items.find(i=>i.ex===ui.sx).sets.map(s=>+s.w||0))})).reverse();
+  const top = Math.max(...pts.map(p=>p.v)), gain = top - pts[0].v;
+  const since = Date.now()-30*864e5, mus = {}; H.filter(h=>h.date>=since).forEach(h=>h.items.forEach(it=>mus[it.m]=(mus[it.m]||0)+it.sets.length));
+  const mm = Math.max(1,...Object.values(mus)), mc = {'อก':'pink','หลัง':'sky','ขา':'lime','ก้น':'lime','น่อง':'lime','ไหล่':'orange','แขน':'violet','ไบเซ็ป':'violet','ไตรเซ็ป':'violet','ปลายแขน':'violet','แกนกลาง':'yellow','คาร์ดิโอ':'pink','ทั้งตัว':'sky'};
+  const tab = ui.st || 'mus';
+  const rows = tab==='mus' ? Object.entries(mus).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([m,n])=>`<div class="hrow"><span>${esc(m)}</span><div class="meter"><i style="width:${n/mm*100}%;background:var(--s-${mc[m]||'violet'})"></i></div><span>${n} เซต</span></div>`)
+    : exs.slice(0,5).map((e,i)=>`<div class="hrow"><span>${i+1}. ${esc(e)}</span><div class="meter"><i style="width:${cnt[e]/cnt[exs[0]]*100}%;background:var(--s-orange)"></i></div><span>${cnt[e]} ครั้ง</span></div>`);
+  return `<header class="top"><h1>สถิติ</h1></header>
+  <div class="xchips">${exs.map(e=>`<button class="chip" data-a="sx" data-x="${esc(e)}" aria-pressed="${e===ui.sx}">${esc(e)}</button>`).join('')}</div>
+  <div class="card tint t-sky grow"><div class="row sp" style="align-items:flex-end"><div><div class="mute">น้ำหนักสูงสุด · ${esc(ui.sx)}</div><div class="num">${fmt(top)} <small>กก.</small></div></div><span class="flag" style="background:var(--card);color:var(--ink)">${gain>0?'+'+fmt(gain)+' กก.':pts.length>1?'ทรงตัว':'ครั้งแรก'}</span></div>
+    <div class="fig"><svg id="chart" role="img" aria-label="กราฟน้ำหนักสูงสุดของ ${esc(ui.sx)} แต่ละครั้ง"></svg></div></div>
+  <div class="card tint t-lime"><div class="seg" role="group"><button data-a="st" data-t="mus" aria-pressed="${tab==='mus'}">กล้ามที่โดน 30 วัน</button><button data-a="st" data-t="ex" aria-pressed="${tab==='ex'}">ท่าที่เล่นบ่อย</button></div>${rows.join('')}</div>
+  <script type="application/json" id="pts">${JSON.stringify(pts)}<\/script>`;
+}
+function bmi(){ const w = (S.body.find(b=>b.w)||{}).w, h = +(S.profile||{}).height; return w && h ? w/((h/100)**2) : null; }
+function avatarBox(size){ const c = (S.profile||{}).avatar || GANG[curChar()].bg; return `<span class="av" style="width:${size}px;height:${size}px;background:var(--t-${c})">${mascot('happy')}</span>`; }
+function menuRow(icon, label, value, attrs){ return `<button class="mrow" ${attrs}><span class="mic">${icon}</span><span class="ml">${label}</span>${value!=null?`<span class="mv">${value}</span>`:''}${ic('chev')}</button>`; }
+const MI = {
+  user:'<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c1-4 4-6 7-6s6 2 7 6"/></svg>',
+  scale:'<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3.5" y="4" width="17" height="16" rx="4"/><path d="M8.5 10a5 5 0 0 1 7 0M12 10l1.5-2"/></svg>',
+  dumb:'<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 7v10M3 9v6M18 7v10M21 9v6M6 12h12"/></svg>',
+  bell:'<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15zM10 20.5h4"/></svg>',
+  data:'<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/></svg>',
+  list:'<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></svg>'
+};
+function vMe(){
+  const pf = S.profile||{}, last = S.body.find(b=>b.w), bm = bmi(), real = S.history.filter(h=>!h.sample).length;
+  return `<header class="top"><h1>ฉัน</h1></header>
+  <div class="card prof">${avatarBox(76)}<div style="flex:1"><h2 style="font-size:22px;font-weight:600">${esc(S.name||'นักยก')}</h2><div class="mute">${pf.height?pf.height+' ซม. · ':''}${last?fmt(last.w)+' กก.':'ยังไม่ได้ชั่งน้ำหนัก'}${bm?' · BMI '+fmt(Math.round(bm*10)/10):''}</div></div>
+    <button class="ic pen" data-a="go" data-v="profile" aria-label="แก้ไขโปรไฟล์">${ic('pencil')}</button></div>
+  <div class="stat3"><div class="card tint t-lime"><div class="num">${real}</div><small>ครั้งที่ฝึก</small></div><div class="card tint t-yellow"><div class="num">${streak()}</div><small>วันติดกัน</small></div><div class="card tint t-orange"><div class="num">${pf.target?fmt(pf.target):'–'}</div><small>น้ำหนักเป้า (กก.)</small></div></div>
+  <div class="card menu">
+    ${menuRow(flameSvg(streak()),'ความสำเร็จ','Lv '+level(xpOf()).lv+' · เหรียญ '+BADGES.filter(b=>(S.ach||{})[b.id]).length+'/'+BADGES.length,'data-a="go" data-v="ach"')}
+    ${menuRow(MI.user,'แก้ไขโปรไฟล์',null,'data-a="go" data-v="profile"')}
+    ${menuRow(MI.scale,'บันทึกร่างกาย',S.body.length?S.body.length+' รายการ':'ยังไม่มี','data-a="go" data-v="body"')}
+    ${menuRow(MI.list,'โปรแกรมของฉัน',S.routines.length+' โปรแกรม','data-a="go" data-v="routines"')}
+    ${menuRow(MI.dumb,'การฝึก','เป้า '+S.goal+' วัน · พัก '+clock(S.rest||90),'data-a="go" data-v="settings" data-s="train"')}
+    ${menuRow(MI.bell,'เสียงและนิสัยน้อง',(S.sound!==false?'เสียงเปิด':'เสียงปิด')+' · '+(S.cheeky!==false?'กวน':'สุภาพ'),'data-a="go" data-v="settings" data-s="fun"')}
+    ${menuRow(MI.data,'ข้อมูลของฉัน',null,'data-a="go" data-v="settings" data-s="data"')}
+  </div>`;
+}
+function vProfile(){
+  const pf = S.profile||{}, ch = ui.ch || curChar(), c = ui.av || pf.avatar || GANG[ch].bg;
+  return `<header class="top"><button class="ghost" data-a="go" data-v="me" style="margin-left:-8px">ยกเลิก</button><h2 style="font-weight:600">แก้ไขโปรไฟล์</h2><button class="pri" style="min-height:40px;padding:0 18px" data-a="saveProfile">บันทึก</button></header>
+  <div class="card" style="display:flex;flex-direction:column;align-items:center;gap:10px"><span class="av" id="pv" style="width:96px;height:96px;background:var(--t-${c})">${mascot('happy','',ch)}</span>
+    <div class="mute" id="pvn">น้อง${GANG[ch].name} · ${GANG[ch].tag}</div>
+    <div class="seg" role="group" aria-label="สไตล์ตัวละคร" style="width:100%;background:var(--chip)"><button data-a="pstyle" data-s="pixel" aria-pressed="${(ui.ps||curStyle())==='pixel'}">8-bit</button><button data-a="pstyle" data-s="soft" aria-pressed="${(ui.ps||curStyle())==='soft'}">นุ่มนิ่ม</button></div>
+    <div class="gang" role="group" aria-label="เลือกตัวละครโปรไฟล์">${Object.entries(GANG).map(([k,g])=>`<button data-a="ch" data-c="${k}" aria-pressed="${k===ch}" aria-label="${g.name} ${g.tag}"><span class="av" style="width:56px;height:56px;background:var(--t-${g.bg})">${mascot('happy','',k)}</span><span>${g.name}</span></button>`).join('')}</div>
+    <div class="sw" role="group" aria-label="สีพื้นหลังรูปโปรไฟล์" style="margin:4px 0 0">${COLORS.map(k=>`<button style="background:var(--s-${k})" data-a="av" data-c="${k}" aria-pressed="${c===k}" aria-label="สี${CNAME[k]}"></button>`).join('')}</div></div>
+  <div class="card">
+    <label class="lb" for="pfName" style="margin-top:0">ชื่อเล่น</label><input class="txt" id="pfName" value="${esc(S.name)}" placeholder="นักยก" maxlength="20">
+    <div class="row" style="gap:12px"><div style="flex:1"><label class="lb" for="pfH">ส่วนสูง (ซม.)</label><input class="txt" id="pfH" inputmode="decimal" value="${pf.height||''}" placeholder="เช่น 172"></div>
+    <div style="flex:1"><label class="lb" for="pfT">น้ำหนักเป้าหมาย (กก.)</label><input class="txt" id="pfT" inputmode="decimal" value="${pf.target||''}" placeholder="เช่น 75"></div></div>
+    <p class="mute" id="pfErr" role="alert" style="margin:8px 0 0"></p></div>`;
+}
+function vBody(){
+  return `<header class="top"><button class="ghost" data-a="go" data-v="me" style="margin-left:-8px">${ic('back')}ฉัน</button><button class="pri" style="min-height:40px;padding:0 16px" data-a="bodyLog">+ บันทึก</button></header><h1 style="margin-bottom:12px">บันทึกร่างกาย</h1>
+  ${S.body.filter(b=>b.w).length>1?`<div class="card tint t-orange"><div class="mute">น้ำหนักตัว</div><div class="fig" style="height:150px"><svg id="chart" role="img" aria-label="กราฟน้ำหนักตัว"></svg></div><script type="application/json" id="pts">${JSON.stringify(S.body.filter(b=>b.w).slice(0,20).reverse().map(b=>({d:b.date,v:+b.w})))}<\/script></div>`:''}
+  <div class="card menu">${S.body.length?S.body.map(b=>`<div class="mrow" style="cursor:default"><span class="ml"><b style="font-weight:500">${new Date(b.date).toLocaleDateString('th-TH',{day:'numeric',month:'short',year:'2-digit'})}</b><small class="mute" style="display:block">${[b.w&&fmt(b.w)+' กก.',b.waist&&'เอว '+fmt(b.waist)+' ซม.',b.arm&&'แขน '+fmt(b.arm)+' ซม.'].filter(Boolean).join(' · ')}</small></span><button class="ic" data-a="bEdit" data-b="${b.id}" aria-label="แก้ไขบันทึกนี้">${ic('pencil')}</button><button class="ic" data-a="bDel" data-b="${b.id}" aria-label="ลบบันทึกนี้">${ic('x')}</button></div>`).join('')
+    :`<div class="empty">${mascot('sleep')}<b>ยังไม่มีบันทึก</b><span class="mute">ชั่งน้ำหนักแล้วกด “+ บันทึก”</span></div>`}</div>`;
+}
+function vSettings(){
+  const s = ui.s || 'train', T = {train:'การฝึก', fun:'เสียงและนิสัยน้อง', data:'ข้อมูลของฉัน'}[s];
+  const body = s==='train' ? `
+    <div class="set"><span>เป้าหมายต่อสัปดาห์<small>จำนวนวันที่อยากฝึก</small></span><div class="step"><button data-a="goal" data-d="-1" aria-label="ลดเป้าหมาย">−</button><b>${S.goal} วัน</b><button data-a="goal" data-d="1" aria-label="เพิ่มเป้าหมาย">+</button></div></div>
+    <div class="set"><span>เวลาพักเริ่มต้น<small>เริ่มนับเมื่อติ๊กเซต</small></span><div class="step"><button data-a="restDef" data-d="-15" aria-label="ลดเวลาพัก">−</button><b>${clock(S.rest||90)}</b><button data-a="restDef" data-d="15" aria-label="เพิ่มเวลาพัก">+</button></div></div>`
+  : s==='fun' ? `
+    <div class="set" data-a="sw" data-k="sound"><span>เสียงเตือนตอนหมดเวลาพัก</span><button class="tog" role="switch" aria-checked="${S.sound!==false}" aria-label="เสียงเตือน"></button></div>
+    <div class="set" data-a="sw" data-k="cheeky"><span>โหมดกวนตีน<small>ปิดแล้วน้องจะพูดเพราะขึ้น (นิดนึง)</small></span><button class="tog" role="switch" aria-checked="${S.cheeky!==false}" aria-label="โหมดกวน"></button></div>`
+  : `
+    <div class="set"><span>ประวัติการฝึก<small>${S.history.length} ครั้ง · โปรแกรมยังอยู่</small></span><button class="sec" style="color:var(--red)" data-a="wipe">${confirmKey==='wipe'?'แน่ใจ? แตะอีกที':'ล้าง'}</button></div>
+    <div class="set"><span>บันทึกร่างกาย<small>${S.body.length} รายการ</small></span><button class="sec" style="color:var(--red)" data-a="wipeBody">${confirmKey==='wipeBody'?'แน่ใจ? แตะอีกที':'ล้าง'}</button></div>
+    <div class="set"><span>สำรองข้อมูล<small>คัดลอกข้อมูลทั้งหมดไว้ย้ายไปแอปอื่น</small></span><button class="sec" data-a="exportData">คัดลอก</button></div>
+    <div class="set"><span>นำเข้าข้อมูล<small>วางข้อมูลที่คัดลอกไว้ (แทนที่ของเดิม)</small></span><button class="sec" data-a="importData">นำเข้า</button></div>
+    ${typeof acctRow==='function'?acctRow():''}`;
+  return `<header class="top"><button class="ghost" data-a="go" data-v="me" style="margin-left:-8px">${ic('back')}ฉัน</button></header><h1 style="margin-bottom:12px">${T}</h1><div class="card">${body}</div>`;
+}
+function drawChart(){
+  const s = $('chart'), pe = $('pts'); if (!s || !pe) return;
+  const pts = JSON.parse(pe.textContent), Wd = s.clientWidth, Ht = s.clientHeight; if (!Wd || !pts.length) return;
+  const ink = getComputedStyle(document.body).color;
+  const L=38, R=14, T=14, B=24, lo = Math.min(...pts.map(p=>p.v)), hi = Math.max(...pts.map(p=>p.v)), pad = Math.max(1,(hi-lo)*.2);
+  const y0 = Math.max(0,lo-pad), y1 = hi+pad, X = i => pts.length<2 ? L+(Wd-L-R)/2 : L+i*(Wd-L-R)/(pts.length-1), Y = v => T+(1-(v-y0)/(y1-y0))*(Ht-T-B);
+  let g = '';
+  for (let k=0;k<3;k++){ const v = y0+(y1-y0)*k/2; g += `<line x1="${L}" x2="${Wd-R}" y1="${Y(v)}" y2="${Y(v)}" stroke="${ink}" stroke-opacity=".15" stroke-dasharray="4 5"/><text x="${L-6}" y="${Y(v)+4}" text-anchor="end" font-size="12" font-family="Mitr" fill="${ink}" fill-opacity=".7">${fmt(Math.round(v*2)/2)}</text>`; }
+  g += `<path d="${pts.map((p,i)=>(i?'L':'M')+X(i)+' '+Y(p.v)).join('')}" fill="none" style="stroke:var(--btn)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>`;
+  g += pts.map((p,i)=>`<circle cx="${X(i)}" cy="${Y(p.v)}" r="${p.v===hi?7:5}" style="fill:${p.v===hi?'#ffd36b':'var(--card)'};stroke:var(--btn)" stroke-width="2.5"><title>${new Date(p.d).toLocaleDateString('th-TH',{day:'numeric',month:'short'})}: ${p.v}</title></circle>`).join('');
+  const lab = i => `<text x="${X(i)}" y="${Ht-4}" text-anchor="${i?'end':'start'}" font-size="12" font-family="Mitr" fill="${ink}" fill-opacity=".7">${new Date(pts[i].d).toLocaleDateString('th-TH',{day:'numeric',month:'short'})}</text>`;
+  s.innerHTML = g + lab(0) + (pts.length>1 ? lab(pts.length-1) : '');
+}
+function render(){
+  const v = ui.view;
+  app.innerHTML = ({today:vToday, routines:vRoutines, edit:vEdit, workout:vWorkout, cal:vCal, stats:vStats, me:vMe, history:vHistory, settings:vSettings, body:vBody, profile:vProfile, ach:vAch})[v]();
+  const tabs = ['today','cal','stats','me'];
+  document.body.classList.toggle('full', !tabs.includes(v)); document.body.classList.toggle('tab', tabs.includes(v));
+  $('nav').innerHTML = [['today','วันนี้'],['cal','ปฏิทิน'],['stats','สถิติ'],['me','ฉัน']]
+    .map(([k,l])=>`<button data-a="go" data-v="${k}" ${k===v?'aria-current="page"':''}>${navIcon(k,k===v)}${l}</button>`).join('');
+  const fw = document.querySelector('.floatw'); if (fw) fw.remove();
+  if (W && tabs.includes(v)) document.body.insertAdjacentHTML('beforeend', `<button class="floatw" data-a="go" data-v="workout">กำลังฝึก · <span id="el">${clock((Date.now()-W.start)/1000)}</span><span id="frest"></span></button>`);
+  if (ro) ro.disconnect();
+  if ($('chart')) { ro = new ResizeObserver(drawChart); ro.observe($('chart')); }
+  tick();
+}
+function wStats(){
+  if (ui.view!=='workout' || !W) return;
+  const done = wDone(), all = nsets(W.items), pct = all?done/all*100:0;
+  $('ws').textContent = done+'/'+all; $('wp').style.width = pct+'%';
+  $('wm').innerHTML = mascot(pct>=100?'proud':pct>50?'tired':'happy','style="left:'+pct+'%"');
+  $('wv').textContent = fmt(vol(W.items.map(it=>({sets:it.sets.filter(s=>s.done)}))));
+}
+let restWas = false;
+function tick(){
+  if (W && $('el')) $('el').textContent = clock((Date.now()-W.start)/1000);
+  const left = (rest.end - Date.now())/1000, on = !!W && left > 0, show = on && ui.view==='workout';
+  if (on) { if (!restWas) { $('rm').innerHTML = mascot('tired'); $('rl').textContent = say('restT'); } $('rt').textContent = clock(left); }
+  else if (restWas) { beep(); toast(say('restEnd')); rest.end=0; ls.set('wk-rest',rest); }
+  $('rest').classList.toggle('on', show); restWas = on;
+  const fr = $('frest'); if (fr) fr.textContent = on ? ' · พัก '+clock(left) : '';
+}
+function hearts(x, y, n){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const cols = ['#ff9ec4','#ffd36b','#7fdc9a','#8cc8ff','#b49cff'];
+  for (let k=0;k<n;k++){ const el = document.createElement('i'); el.className='heart';
+    el.style.cssText = `left:${x}px;top:${y}px;background:${cols[k%5]};--dx:${(Math.random()-.5)*120}px;--dy:${-60-Math.random()*90}px;--r:${(Math.random()-.5)*90}deg`;
+    document.body.appendChild(el); setTimeout(()=>el.remove(), 900); }
+}
+function beep(){ if (S.sound===false) return; try{ if(!actx) return; [0,.18].forEach(dt=>{ const o=actx.createOscillator(), g=actx.createGain(), t=actx.currentTime+dt; o.frequency.value=880+dt*1200; g.gain.setValueAtTime(.25,t); g.gain.exponentialRampToValueAtTime(.001,t+.25); o.connect(g).connect(actx.destination); o.start(t); o.stop(t+.26); }); }catch(e){} }
+setInterval(tick, 1000);
+
+/* ---------- workout ---------- */
+function startW(r){
+  if (W) { if (confirmKey!=='switch') { confirmKey='switch'; return toast('มีการฝึกค้างอยู่ แตะอีกทีเพื่อเริ่มใหม่'); } confirmKey=null; }
+  closeSheet();
+  W = {name: r ? (r.name||'การฝึก') : 'ฝึกแบบฟรีสไตล์', rid: r ? r.id : null, color: r ? r.color : 'yellow', start: Date.now(),
+       items: (r ? r.items : []).map(it=>({ex:it.ex, m:it.m, ss:!!it.ss, note:it.note||'', sets:it.sets.map(s=>({w:s.w, reps:s.reps, done:false}))}))};
+  ls.set('wk-active', W); go('workout');
+}
+const saveW = () => ls.set('wk-active', W);
+function openSheet(html, mode){ opener = document.activeElement; pk = Object.assign({mode}, pk && pk.mode===mode ? pk : {}); $('panel').innerHTML = html; $('sheet').classList.add('on'); const f = $('pq') || $('panel').querySelector('input,button:not([disabled])'); f && f.focus({preventScroll:true}); }
+function finishSheet(){
+  const done = wDone();
+  pk = null;
+  openSheet(`<div class="row sp"><h2>จบการฝึกแล้วเหรอ?</h2></div>
+    <p class="mute">ทำไป ${done} จาก ${nsets(W.items)} เซต ใน ${dur((Date.now()-W.start)/1000)}${done?'':' — ยังไม่ติ๊กสักเซตเลยนะ!'}</p>
+    ${W.rid&&routineById(W.rid)?'<div class="set" data-p="tog2"><span>อัปเดตน้ำหนัก ครั้ง และโน้ตในโปรแกรมตามวันนี้<small>ครั้งหน้าจะได้เริ่มจากตรงนี้</small></span><button class="tog" role="switch" id="upd" aria-checked="true" aria-label="อัปเดตโปรแกรม"></button></div>':''}
+    <div class="pfoot"><button class="sec" data-p="close" style="flex:1;min-height:52px">ฝึกต่อ</button><button class="pri" data-p="save" style="flex:2;min-height:52px" ${done?'':'disabled'}>บันทึกการฝึก</button></div>`, 'finish');
+}
+function doFinish(){
+  const upd = $('upd') && $('upd').getAttribute('aria-checked')==='true', r = routineById(W.rid);
+  const its = W.items.map(it=>({ex:it.ex, m:it.m, sets:it.sets.filter(s=>s.done).map(s=>({w:+s.w||0, reps:+s.reps||0}))})).filter(it=>it.sets.length);
+  const prs = W.items.reduce((a,it)=>a+(it.sets.some(s=>s.done&&s.pr)?1:0),0), d = Math.round((Date.now()-W.start)/1000);
+  S.noDemo = true; S.history = S.history.filter(h=>!h.sample);
+  S.history.unshift({id:uid(), name:W.name, color:W.color, date:W.start, dur:d, items:its, pr:prs, ss:W.items.some(i=>i.ss)});
+  if (upd && r) r.items = W.items.map(it=>({ex:it.ex, m:it.m, ss:!!it.ss, note:it.note||'', sets:it.sets.map(s=>({w:+s.w||0, reps:+s.reps||0}))}));
+  const fresh = checkAch();
+  const cel = {dur:d, sets:nsets(its), vol:vol(its), pr:prs, line:say('finish'), xp:50+nsets(its)*2+prs*20, badges:fresh.map(b=>b.id)};
+  ls.set('wk-celebrate', cel);
+  W = null; rest.end = 0; ls.set('wk-active', null); ls.set('wk-rest', rest); closeSheet();
+  touch(); ui = {view:'cal'}; ls.set('wk-ui', ui); render(); celebrate(cel); if (!art) ls.set('wk-celebrate', null); commit('บันทึกการฝึกแล้ว');
+}
+function celebrate(c){
+  const cols = ['#ffd36b','#7fdc9a','#8cc8ff','#ff9ec4','#f6a08e','#b49cff'];
+  $('cele').innerHTML = Array.from({length:36},(_,i)=>`<i class="conf" style="left:${Math.random()*100}%;background:${cols[i%6]};animation-duration:${2+Math.random()*2.5}s;animation-delay:${Math.random()*.8}s"></i>`).join('')+
+    `<div class="mwrap bob">${mascot('proud')}</div><h1>${esc(c.line)}</h1><p style="margin:0;font:19px Itim,Mali,sans-serif;color:var(--mute)">${c.pr?`ทำสถิติใหม่ ${c.pr} ท่า! โหดเกิน`:'ไม่มี PR วันนี้ แต่มาฝึกก็ชนะแล้ว'}</p>
+    <div class="tiles3"><div><div class="num">${dur(c.dur)}</div><small>เวลา</small></div><div><div class="num">${c.sets}</div><small>เซต</small></div><div><div class="num">${fmt(c.vol)}</div><small>กก. รวม</small></div></div>
+    <div class="flag" style="margin-bottom:14px">+${c.xp||0} XP</div>
+    ${(c.badges||[]).length?`<div class="newb"><div class="mute">ปลดล็อกเหรียญใหม่!</div><div class="row" style="justify-content:center;gap:12px;flex-wrap:wrap">${c.badges.map(id=>{ const b=BADGES.find(x=>x.id===id); return b?`<div class="bdg pop">${medal(b,true)}<b>${esc(b.name)}</b></div>`:''; }).join('')}</div></div>`:''}
+    <button class="pri" data-a="celeOk" style="min-width:220px;min-height:52px">เยี่ยม! ไปพักได้</button>`;
+  $('cele').classList.add('on'); setTimeout(()=>{ const b=$('cele').querySelector('button'); b&&b.focus(); },50);
+}
+
+/* ---------- sheets ---------- */
+/* ---------- animated how-to demos (one shared rig per movement) ---------- */
+function demoChar(cx, cy, rx, ry, faceDx){
+  const C = GANG[curChar()] || GANG.gk, fx = cx + (faceDx||0);
+  return `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="${C.fill}"/>
+    <path d="M${fx-12} ${cy-6}q4-5 8 0M${fx+4} ${cy-6}q4-5 8 0" fill="none"/>
+    <path d="M${fx-4} ${cy+3}q4 4 8 0" fill="none"/>
+    <ellipse cx="${fx-14}" cy="${cy+3}" rx="4.5" ry="3" fill="#ff9ec4" stroke="none"/><ellipse cx="${fx+14}" cy="${cy+3}" rx="4.5" ry="3" fill="#ff9ec4" stroke="none"/>`;
+}
+const SPL = 'calcMode="spline" keyTimes="0;.5;1" keySplines=".45 0 .55 1;.45 0 .55 1" dur="2.8s" repeatCount="indefinite"';
+const anim = (attr, vals) => `<animate attributeName="${attr}" values="${vals}" ${SPL}/>`;
+const DEMO = {
+  'Squat':{ art:()=>`
+    <line x1="10" y1="146" x2="190" y2="146" stroke-opacity=".35"/>
+    <path fill="none">${anim('d','M90 112 L88 130 L86 146;M90 134 L72 138 L84 146;M90 112 L88 130 L86 146')}</path>
+    <path fill="none">${anim('d','M110 112 L112 130 L114 146;M110 134 L128 138 L116 146;M110 112 L112 130 L114 146')}</path>
+    <ellipse cx="84" cy="147" rx="8" ry="3" fill="#4a2c22"/><ellipse cx="116" cy="147" rx="8" ry="3" fill="#4a2c22"/>
+    <g><animateTransform attributeName="transform" type="translate" values="0 0;0 22;0 0" ${SPL}/>
+      <line x1="26" y1="66" x2="174" y2="66" stroke-width="4"/>
+      <rect x="26" y="50" width="10" height="32" rx="3" fill="#8cc8ff"/><rect x="164" y="50" width="10" height="32" rx="3" fill="#8cc8ff"/>
+      <rect x="38" y="55" width="6" height="22" rx="2" fill="#ffd36b"/><rect x="156" y="55" width="6" height="22" rx="2" fill="#ffd36b"/>
+      ${demoChar(100,84,26,30)}
+      <path d="M76 90 Q58 84 56 66M124 90 Q142 84 144 66" fill="none"/><circle cx="56" cy="66" r="4" fill="#4a2c22"/><circle cx="144" cy="66" r="4" fill="#4a2c22"/></g>`,
+    how:['ยืนเท้ากว้างประมาณไหล่ ปลายเท้าแบะออกเล็กน้อย วางบาร์บนบ่าด้านหลัง','หายใจเข้า เกร็งหน้าท้อง แล้วนั่งลงเหมือนนั่งเก้าอี้ ดันเข่าออกตามแนวปลายเท้า','ลงจนต้นขาขนานพื้นหรือต่ำกว่า แล้วดันพื้นขึ้นด้วยส้นเท้า'],
+    no:['เข่าหุบเข้าด้านในตอนลุกขึ้น','ส้นเท้าลอย หรือหลังงอตอนลง'] },
+  'Bench Press':{ art:()=>`
+    <line x1="10" y1="146" x2="190" y2="146" stroke-opacity=".35"/>
+    <path d="M60 114v32M146 114v32" fill="none"/><rect x="40" y="104" width="122" height="10" rx="5" fill="#b49cff"/>
+    <path d="M136 98 L158 112 L156 144" fill="none"/><ellipse cx="160" cy="145" rx="8" ry="3" fill="#4a2c22"/>
+    ${demoChar(98,90,46,16,-24)}
+    <path fill="none">${anim('d','M114 82 L100 92 L116 66;M114 82 L116 58 L116 30;M114 82 L100 92 L116 66')}</path>
+    <g><animateTransform attributeName="transform" type="translate" values="0 0;0 -36;0 0" ${SPL}/>
+      <circle cx="116" cy="62" r="17" fill="#8cc8ff"/><circle cx="116" cy="62" r="11" fill="#ffd36b"/><circle cx="116" cy="62" r="3" fill="#4a2c22"/></g>`,
+    how:['นอนให้ตาอยู่ใต้บาร์ บีบสะบักเข้าหากัน เท้าวางแน่นกับพื้น','จับบาร์กว้างกว่าไหล่เล็กน้อย ลดบาร์ลงช้าๆ แตะกลางอก ศอกทำมุมราว 45° กับลำตัว','ดันบาร์ขึ้นตรงๆ จนแขนตึง โดยไม่ล็อกศอกแรงๆ'],
+    no:['ก้นลอยจากม้านั่งตอนดัน','ปล่อยบาร์กระแทกอก เล่นหนักควรมีคนช่วยดู'] },
+  'Lat Pulldown':{ art:()=>`
+    <line x1="10" y1="146" x2="190" y2="146" stroke-opacity=".35"/>
+    <path d="M30 146V12h150v134" fill="none" stroke-opacity=".5"/><circle cx="100" cy="16" r="5" fill="#fff"/>
+    <line x1="100" y1="21" x2="100" y2="34">${anim('y2','34;70;34')}</line>
+    <path d="M105 16h66v70" fill="none" stroke-width="2"/>
+    <rect x="160" y="100" width="22" height="44" rx="3" fill="#e8e1da"/>
+    <g><animateTransform attributeName="transform" type="translate" values="0 0;0 -24;0 0" ${SPL}/><rect x="160" y="86" width="22" height="14" rx="3" fill="#ffd36b"/></g>
+    <path d="M90 124 L86 146M110 124 L114 146" fill="none"/><ellipse cx="84" cy="147" rx="7" ry="3" fill="#4a2c22"/><ellipse cx="116" cy="147" rx="7" ry="3" fill="#4a2c22"/>
+    <rect x="80" y="126" width="40" height="8" rx="4" fill="#b49cff"/>
+    ${demoChar(100,100,26,28)}
+    <rect x="72" y="112" width="56" height="9" rx="4.5" fill="#b49cff"/>
+    <path fill="none">${anim('d','M80 92 L66 62 L56 34;M80 92 L60 94 L56 70;M80 92 L66 62 L56 34')}</path>
+    <path fill="none">${anim('d','M120 92 L134 62 L144 34;M120 92 L140 94 L144 70;M120 92 L134 62 L144 34')}</path>
+    <g><animateTransform attributeName="transform" type="translate" values="0 0;0 36;0 0" ${SPL}/><line x1="40" y1="34" x2="160" y2="34" stroke-width="4"/><path d="M40 34v6M160 34v6" stroke-width="4"/></g>`,
+    how:['ปรับแผ่นรองต้นขาให้ล็อกขาพอดี จับบาร์กว้างกว่าไหล่','เอนตัวไปหลังเล็กน้อย ยกอก ดึงบาร์ลงมาที่อกบน นึกว่ากำลังดึงศอกลงไปหาสะโพก','ค่อยๆ ปล่อยบาร์ขึ้นจนแขนเหยียดสุด แล้วค่อยดึงครั้งต่อไป'],
+    no:['ดึงบาร์ลงไปหลังคอ','เหวี่ยงตัวไปมาเพื่อช่วยดึง'] }
+};
+/* next-session suggestion: last time every planned set hit its reps -> add weight */
+function suggest(it){
+  const last = lastSets(it.ex); if (!last || !it.sets.length) return null;
+  const ok = it.sets.every((s,j)=>last[j] && (+last[j].reps||0) >= (+s.reps||0) && (+last[j].w||0) >= (+s.w||0));
+  const top = Math.max(...last.map(s=>+s.w||0)); if (!ok || !top) return null;
+  const step = (EXINFO[it.ex]||{}).eq==='D' ? 1 : 2.5, w = top + step;
+  return it.sets.some(s=>(+s.w||0) < w) ? w : null;
+}
+const PLATES = [[25,'#ff6b5b'],[20,'#8cc8ff'],[15,'#ffd36b'],[10,'#7fdc9a'],[5,'#fff'],[2.5,'#b49cff'],[1.25,'#d8d2cc']];
+function plateSheet(w, bar){
+  bar = bar || 20; let side = Math.max(0,(w-bar)/2); const use = [];
+  for (const [kg,c] of PLATES) while (side >= kg-1e-9) { use.push([kg,c]); side = Math.round((side-kg)*100)/100; }
+  let off = 0, rects = '';  // plates stack outward from each collar
+  use.forEach(([kg,c])=>{ const hgt = 20+kg*2.4, wd = kg>=10?12:8; rects += `<rect x="${136-off-wd}" y="${60-hgt/2}" width="${wd}" height="${hgt}" rx="2" fill="${c}"/><rect x="${164+off}" y="${60-hgt/2}" width="${wd}" height="${hgt}" rx="2" fill="${c}"/>`; off += wd+2; });
+  pk = null;
+  openSheet(`<div class="row sp"><h2>ใส่แผ่นยังไงดี</h2><button class="ic" data-p="close" aria-label="ปิด">${ic('x')}</button></div>
+    <div class="opts" style="padding-bottom:max(18px,env(safe-area-inset-bottom))">
+    <div class="row" style="gap:8px;margin:6px 0 10px"><input class="txt" id="plW" inputmode="decimal" value="${w}" aria-label="น้ำหนักรวม (กก.)" style="flex:1"><div class="seg" role="group" aria-label="น้ำหนักบาร์" style="margin:0;background:var(--chip)">${[20,15].map(b=>`<button data-p="plBar" data-b="${b}" aria-pressed="${b===bar}">บาร์ ${b}</button>`).join('')}</div></div>
+    <div class="demo" style="padding:14px 6px"><svg viewBox="0 0 300 120" stroke="#4a2c22" stroke-width="2" role="img" aria-label="บาร์ ${bar} กก. ใส่แผ่นข้างละ ${use.map(u=>u[0]).join(', ')||'ไม่ต้องใส่'}"><rect x="20" y="56" width="260" height="8" rx="3" fill="#cfc7bf"/><rect x="138" y="54" width="24" height="12" rx="2" fill="#e8e1da"/>${rects}</svg></div>
+    <h4>ข้างละ</h4><p style="margin:0;font:500 18px Mitr,sans-serif">${use.length?use.map(u=>u[0]).join(' + ')+' กก.':'ไม่ต้องใส่แผ่น ใช้บาร์เปล่า'}</p>
+    ${side>0?`<p class="mute">ขาดอีก ${fmt(side*2)} กก. ที่แผ่นมาตรฐานใส่ไม่ได้พอดี</p>`:''}
+    <p class="mute" style="font-size:13px">คิดจากบาร์ ${bar} กก. และแผ่น 25 / 20 / 15 / 10 / 5 / 2.5 / 1.25 กก.</p></div>`, 'plates');
+  pk.bar = bar;
+}
+function demoSheet(ex){
+  const d = DEMO[ex]; if (!d) return; const info = EXINFO[ex] || {};
+  pk = null;
+  openSheet(`<div class="row sp"><h2>${esc(ex)}</h2><button class="ic" data-p="close" aria-label="ปิด">${ic('x')}</button></div>
+    <div class="mute" style="margin-top:-4px">${[info.th, info.m, EQ[info.eq]].filter(Boolean).map(esc).join(' · ')}</div>
+    <div class="opts" style="padding-bottom:max(18px,env(safe-area-inset-bottom))">
+      <div class="demo"><svg id="demoSvg" viewBox="0 0 200 160" stroke="#4a2c22" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="แอนิเมชันน้อง${GANG[curChar()].name}สาธิตท่า ${esc(ex)}">${d.art()}</svg>
+        <button class="sec demoplay" data-p="demoPlay" aria-pressed="true">หยุด</button></div>
+      <h4>วิธีเล่น</h4><ol class="how">${d.how.map(s=>`<li>${esc(s)}</li>`).join('')}</ol>
+      <h4>ระวัง</h4><ul class="no">${d.no.map(s=>`<li>${esc(s)}</li>`).join('')}</ul>
+      <p class="mute" style="font-size:13px">เป็นคำแนะนำทั่วไป ถ้าเจ็บหรือไม่แน่ใจท่า ควรให้เทรนเนอร์ช่วยดู</p></div>`, 'demo');
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) { $('demoSvg').pauseAnimations(); const pb=$('panel').querySelector('.demoplay'); pb.textContent='เล่น'; pb.setAttribute('aria-pressed','false'); }
+}
+
+function openPick(){ pk = {mode:'pick', q:'', g:'', eq:'', fo:false, sel:[]}; opener = document.activeElement; drawPick(); $('sheet').classList.add('on'); $('pq').focus({preventScroll:true}); }
+function optsHtml(){
+  const L = Object.assign({}, LIB); if (S.custom.length) L['ท่าของฉัน'] = S.custom.map(x=>[x,'','O']);
+  const q = pk.q.trim().toLowerCase(); let o = '', n = 0;
+  for (const [m,arr] of Object.entries(L)) {
+    if (pk.g && pk.g!==m) continue;
+    const hit = arr.filter(([en,th,eq])=>(en.toLowerCase().includes(q)||th.includes(q)) && (!pk.eq || eq===pk.eq));
+    n += hit.length;
+    if (hit.length) o += `<h4>${esc(m)}</h4>` + hit.map(([x,th,eq])=>{ const on=pk.sel.some(s=>s.ex===x); return `<button class="opt" data-p="tog" data-ex="${esc(x)}" data-m="${esc(m)}" aria-pressed="${on}"><span>${esc(x)}${DEMO[x]?` <em class="demotag" data-p="demo" data-x="${esc(x)}">ดูวิธีเล่น</em>`:''}<small>${[th,EQ[eq]].filter(Boolean).map(esc).join(' · ')}</small></span><i>${on?ic('check'):''}</i></button>`; }).join('');
+  }
+  o = `<div class="mute" style="font-size:13px;margin:4px 2px 0">พบ ${n} ท่า</div>` + (n ? o : `<div class="empty"><b style="font-size:17px">ไม่เจอท่านี้</b><span class="mute">ลองล้างตัวกรอง หรือสร้างท่าเองด้านล่าง</span></div>`);
+  o += `<h4>ไม่เจอท่าที่อยากเล่น? สร้างเองเลย</h4><div class="row"><input class="txt" id="cn" placeholder="ชื่อท่าใหม่ เช่น Cable Fly" value="${esc(pk.q)}" aria-label="ชื่อท่าใหม่" style="flex:2"><button class="sec" style="min-height:48px" data-p="custom">สร้าง</button></div>`;
+  return {o, L};
+}
+function drawPick(){
+  const {o, L} = optsHtml();
+  $('panel').innerHTML = `<div class="row sp"><h2>เลือกท่า</h2><button class="ic" data-p="close" aria-label="ปิด">${ic('x')}</button></div>
+    <div class="srch"><input class="txt" id="pq" placeholder="ค้นหาท่า เช่น Squat หรือ สควอท" value="${esc(pk.q)}" aria-label="ค้นหาท่า">
+      <button class="fbtn" data-p="fo" aria-expanded="${pk.fo}" aria-controls="fpanel" aria-label="ตัวกรอง${pk.g||pk.eq?' (ใช้อยู่)':''}"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16l-6 7.5V19l-4 1.5v-8z" fill="${pk.g||pk.eq?'currentColor':'none'}"/></svg>${pk.g||pk.eq?`<b>${(pk.g?1:0)+(pk.eq?1:0)}</b>`:''}</button></div>
+    ${pk.fo?`<div class="fpanel" id="fpanel"><h4>ส่วนของร่างกาย</h4><div class="fwrap">${['',...Object.keys(L)].map(g=>`<button class="chip" data-p="grp" data-g="${esc(g)}" aria-pressed="${g===pk.g}">${g?esc(g):'ทั้งหมด'}</button>`).join('')}</div>
+      <h4>อุปกรณ์</h4><div class="fwrap">${['',...Object.keys(EQ)].map(k=>`<button class="chip" data-p="eq" data-e="${k}" aria-pressed="${k===pk.eq}">${k?EQ[k]:'ทั้งหมด'}</button>`).join('')}</div>
+      <div class="row sp" style="margin-top:10px"><button class="ghost" data-p="fclear">ล้างตัวกรอง</button><button class="sec" style="min-height:40px" data-p="fo">ดูผลลัพธ์</button></div></div>`
+    : pk.g||pk.eq ? `<div class="fwrap" style="margin-top:8px">${pk.g?`<button class="chip on" data-p="grp" data-g="">${esc(pk.g)} ${ic('x')}</button>`:''}${pk.eq?`<button class="chip on" data-p="eq" data-e="">${EQ[pk.eq]} ${ic('x')}</button>`:''}</div>` : ''}
+    <div class="opts" id="po">${o}</div>
+    <div class="pfoot"><button class="pri wide" style="min-height:52px" data-p="add" ${pk.sel.length?'':'disabled'}>${pk.sel.length?'เพิ่ม '+pk.sel.length+' ท่า':'เลือกท่าก่อนน้า'}</button></div>`;
+}
+function closeSheet(){ const was = $('sheet').classList.contains('on'); $('sheet').classList.remove('on'); pk = null; if (was && opener && document.contains(opener)) opener.focus({preventScroll:true}); opener = null; }
+function addPicked(){
+  const list = items();
+  for (const s of pk.sel) {
+    const prev = lastSets(s.ex);
+    list.push({ex:s.ex, m:s.m, note:lastNote(s.ex), sets:(prev || [{w:0,reps:10},{w:0,reps:10},{w:0,reps:10}]).map(x=>ui.view==='workout'?{w:x.w,reps:x.reps,done:false}:{w:x.w,reps:x.reps})});
+  }
+  ui.view==='workout' ? saveW() : touch();
+  closeSheet(); render(); const c = app.querySelectorAll('.card'); c.length && c[c.length-1].scrollIntoView && c[c.length-1].scrollIntoView({block:'center'});
+}
+function routineSheet(title, day){
+  pk = null;
+  openSheet(`<div class="row sp"><h2>${title}</h2><button class="ic" data-p="close" aria-label="ปิด">${ic('x')}</button></div><div class="opts" style="padding-bottom:max(20px,env(safe-area-inset-bottom))">`+
+    (day==null ? chooser() : S.routines.map(r=>`<button class="card tint t-${r.color} pick" data-p="setDay" data-d="${day}" data-r="${r.id}"><span style="width:44px;flex:none">${face('happy',r.color)}</span><span><b>${esc(r.name||'โปรแกรมไม่มีชื่อ')}</b><small>${r.items.length} ท่า</small></span></button>`).join('')+
+      `<button class="card pick" data-p="setDay" data-d="${day}" data-r=""><span style="width:44px;flex:none">${face('sleep')}</span><span><b>วันพัก</b><small>ไม่ฝึกวันนี้</small></span></button>`)+'</div>', 'choose');
+}
+function bodySheet(edit){
+  pk = {mode:'body', edit: edit ? edit.id : null};
+  const l = edit || S.body[0] || {}, v = k => edit && edit[k] ? edit[k] : '';
+  openSheet(`<div class="row sp"><h2>${edit?'แก้ไขบันทึก':'บันทึกร่างกาย'}</h2><button class="ic" data-p="close" aria-label="ปิด">${ic('x')}</button></div>
+    <div class="opts"><label class="lb" for="bw">น้ำหนัก (กก.)</label><input class="txt" id="bw" inputmode="decimal" value="${v('w')}" placeholder="${l.w||'เช่น 68.4'}">
+    <label class="lb" for="bwa">รอบเอว (ซม.) <span style="float:right;font-weight:400">ไม่บังคับ</span></label><input class="txt" id="bwa" inputmode="decimal" value="${v('waist')}" placeholder="${l.waist||'เช่น 78'}">
+    <label class="lb" for="bar">รอบแขน (ซม.) <span style="float:right;font-weight:400">ไม่บังคับ</span></label><input class="txt" id="bar" inputmode="decimal" value="${v('arm')}" placeholder="${l.arm||'เช่น 36'}">
+    <p class="mute" id="berr" role="alert"></p></div>
+    <div class="pfoot"><button class="pri wide" style="min-height:52px" data-p="bodySave">บันทึก</button></div>`, 'body');
+}
+const num = v => { const x = parseFloat(String(v).replace(',','.')); return isNaN(x)||x<=0 ? null : x; };
+$('sheet').addEventListener('click', e=>{
+  if (e.target === $('sheet')) return closeSheet();
+  const b = e.target.closest('[data-p]'); if (!b) return; const p = b.dataset.p;
+  if (p==='plBar') return plateSheet(num($('plW').value)||20, +b.dataset.b);
+  if (p==='doImport') { let x; try { x = JSON.parse($('impT').value); } catch(e) {} if (!x || !Array.isArray(x.routines) || !Array.isArray(x.history)) { $('impE').textContent='ข้อมูลไม่ถูกต้อง ลองคัดลอกใหม่อีกครั้ง'; return; }
+    S = Object.assign(S, x, {saved:S.saved}); S.noDemo = true; touch(); closeSheet(); go('today'); return commit('นำเข้าข้อมูลแล้ว'); }
+  if (p==='close') return pk && pk.back ? (pk = pk.back, drawPick()) : closeSheet();
+  if (p==='demo') { const back = pk; demoSheet(b.dataset.x); pk = Object.assign(pk||{mode:'demo'}, {back}); return; }
+  if (p==='demoPlay') { const s=$('demoSvg'), on=b.getAttribute('aria-pressed')==='true'; on?s.pauseAnimations():s.unpauseAnimations(); b.setAttribute('aria-pressed',!on); b.textContent=on?'เล่น':'หยุด'; return; }
+  if (p==='save') return doFinish();
+  if (p==='tog2') { const t=$('upd'); return t.setAttribute('aria-checked', t.getAttribute('aria-checked')!=='true'); }
+  if (p==='grp' || p==='eq') { if (p==='grp') pk.g = b.dataset.g; else pk.eq = b.dataset.e; drawPick(); const c=$('panel').querySelector(p==='grp'?`[data-p=grp][data-g="${CSS.escape(pk.g)}"]`:`[data-p=eq][data-e="${pk.eq}"]`) || $('pq'); return c.focus(); }
+  if (p==='fo') { pk.fo = !pk.fo; drawPick(); return $('panel').querySelector('.fbtn').focus(); }
+  if (p==='fclear') { pk.g=''; pk.eq=''; drawPick(); return $('panel').querySelector('.fbtn').focus(); }
+  if (p==='tog') { const k=pk.sel.findIndex(s=>s.ex===b.dataset.ex); k<0?pk.sel.push({ex:b.dataset.ex,m:b.dataset.m}):pk.sel.splice(k,1);
+    b.setAttribute('aria-pressed',k<0); b.querySelector('i').innerHTML=k<0?ic('check'):''; const a=$('panel').querySelector('[data-p=add]'); a.disabled=!pk.sel.length; a.textContent=pk.sel.length?'เพิ่ม '+pk.sel.length+' ท่า':'เลือกท่าก่อนน้า'; return; }
+  if (p==='custom') { const n=$('cn').value.trim(); if(!n) return $('cn').focus(); if(!S.custom.includes(n)){ S.custom.push(n); touch(); }
+    if(!pk.sel.some(s=>s.ex===n)) pk.sel.push({ex:n,m:'ท่าของฉัน'}); pk.q=''; pk.g='ท่าของฉัน'; pk.eq=''; return drawPick(); }
+  if (p==='add') return addPicked();
+  if (p==='setDay') { S.schedule[+b.dataset.d] = b.dataset.r || null; touch(); closeSheet(); render(); return; }
+  if (p==='bodySave') {
+    const w=num($('bw').value), wa=num($('bwa').value), ar=num($('bar').value);
+    if (!w && !wa && !ar) { $('berr').textContent='ใส่อย่างน้อยหนึ่งช่องนะ'; return $('bw').focus(); }
+    const ed = pk && pk.edit && S.body.find(x=>x.id===pk.edit);
+    if (ed) Object.assign(ed, {w, waist:wa, arm:ar}); else S.body.unshift({id:uid(), date:Date.now(), w, waist:wa, arm:ar});
+    const nb = checkAch(); touch(); closeSheet(); render(); return commit(nb.length ? 'ปลดล็อกเหรียญ: '+nb.map(b=>b.name).join(', ') : ed?'แก้ไขบันทึกแล้ว':'บันทึกร่างกายแล้ว');
+  }
+});
+$('sheet').addEventListener('click', e=>{ const b=e.target.closest('[data-a=start],[data-a=startEmpty]'); if (b) { e.stopPropagation(); b.dataset.a==='start' ? startW(routineById(b.dataset.r)) : startW(null); } });
+$('sheet').addEventListener('input', e=>{ if (e.target.id==='pq') { pk.q = e.target.value; $('po').innerHTML = optsHtml().o; } });
+$('sheet').addEventListener('change', e=>{ if (e.target.id==='plW') plateSheet(num(e.target.value)||20, pk&&pk.bar); });
+$('sheet').addEventListener('keydown', e=>{ if (e.key==='Enter' && e.target.id==='cn') { e.preventDefault(); $('panel').querySelector('[data-p=custom]').click(); } });
+document.addEventListener('keydown', e=>{
+  if (e.key==='Tab' && $('sheet').classList.contains('on')) { const f=[...$('panel').querySelectorAll('button:not([disabled]),input')]; if(!f.length) return; const a=f[0], z=f[f.length-1]; if (e.shiftKey && document.activeElement===a) { e.preventDefault(); z.focus(); } else if (!e.shiftKey && document.activeElement===z) { e.preventDefault(); a.focus(); } }
+  if (e.key==='Escape') { if ($('cele').classList.contains('on')) $('cele').classList.remove('on'); else if ($('sheet').classList.contains('on')) closeSheet(); }
+});
+
+/* ---------- main events ---------- */
+document.addEventListener('click', e=>{
+  const ms = e.target.closest('.mas'); if (ms && !e.target.closest('button')) { const now = Date.now(); pokeN = now - pokeT < 1500 ? pokeN + 1 : 1; pokeT = now; ms.classList.remove('boing','angry'); void ms.offsetWidth; if (pokeN >= 10) { pokeN = 0; ms.classList.add('angry'); toast(S.cheeky===false ? 'พอก่อนนะ น้องเวียนหัวแล้ว' : 'จิ้มอยู่ได้! น้องโกรธแล้วนะ ไปยกเหล็กไป!'); setTimeout(()=>ms.classList.remove('angry'), 2500); } else { ms.classList.add('boing'); toast(pokeN >= 7 ? 'อีกทีจะโกรธจริงๆ นะ' : poke()); } }
+  const b = e.target.closest('[data-a]'); if (!b || b.closest('#sheet')) return;
+  if (b.classList.contains('set') && e.target.closest('input')) return;
+  const a = b.dataset.a, i = +b.dataset.i, j = +b.dataset.j;
+  if (!['delR','cancelW','hDel','start','startEmpty','wipe','wipeBody'].includes(a)) confirmKey = null;
+  if (a==='undo') { if (undoFn) { undoFn(); undoFn=null; ui.view==='workout' ? saveW() : touch(); render(); } return $('toast').classList.remove('on'); }
+  if (a==='go') return go(b.dataset.v, b.dataset.s ? {s:b.dataset.s} : null);
+  if (a==='choose') return routineSheet('วันนี้เล่นอะไรดี');
+  if (a==='schedDay') return routineSheet('วัน'+DOWL[+b.dataset.d]+' เล่นอะไร', +b.dataset.d);
+  if (a==='bodyLog') return bodySheet();
+  if (a==='bDel') { const k=S.body.findIndex(x=>x.id===b.dataset.b), it=S.body.splice(k,1)[0]; touch(); render(); return toast('ลบบันทึกแล้ว', ()=>S.body.splice(k,0,it)); }
+  if (a==='celeOk') return $('cele').classList.remove('on');
+  if (a==='edit') return go('edit', {rid:b.dataset.r});
+  if (a==='newR') { const r={id:uid(),name:'',color:COLORS[S.routines.length%6],items:[]}; S.routines.push(r); touch(); return go('edit',{rid:r.id}); }
+  if (a==='dup') { const r=routineById(b.dataset.r), c=JSON.parse(JSON.stringify(r)); c.id=uid(); c.name=(r.name||'โปรแกรม')+' (สำเนา)'; S.routines.splice(S.routines.indexOf(r)+1,0,c); touch(); render(); return commit('ทำสำเนาแล้ว'); }
+  if (a==='start') return startW(routineById(b.dataset.r));
+  if (a==='startEmpty') return startW(null);
+  if (a==='pick') return openPick();
+  if (a==='finish') return finishSheet();
+  if (a==='clearSample') { S.noDemo = true; S.history = S.history.filter(h=>!h.sample); touch(); render(); return commit('ล้างข้อมูลตัวอย่างแล้ว'); }
+  if (a==='cm') { ui.cm=(ui.cm||0)+(+b.dataset.d); ui.cd=0; return render(); }
+  if (a==='cday') { ui.cd = +b.dataset.t; return render(); }
+  if (a==='sx') { ui.sx = b.dataset.x; return render(); }
+  if (a==='st') { ui.st = b.dataset.t; return render(); }
+  if (a==='pstyle') { ui.ps = b.dataset.s; const keep = {n:$('pfName').value, h:$('pfH').value, t:$('pfT').value}; const prev = S.profile; S.profile = Object.assign({}, prev, {style:ui.ps}); render(); S.profile = prev; $('pfName').value=keep.n; $('pfH').value=keep.h; $('pfT').value=keep.t; return; }
+  if (a==='ch') { ui.ch = b.dataset.c; const g = GANG[ui.ch]; if (!ui.av) ui.av = null; document.querySelectorAll('[data-a=ch]').forEach(x=>x.setAttribute('aria-pressed', x===b)); $('pv').innerHTML = mascot('happy','',ui.ch); if (!ui.av) $('pv').style.background = `var(--t-${g.bg})`; $('pvn').textContent = `น้อง${g.name} · ${g.tag}`; return; }
+  if (a==='demo') return demoSheet(b.dataset.x);
+  if (a==='exportData') { const t = JSON.stringify(Object.assign({}, S, {history:S.history.filter(h=>!h.sample)})); navigator.clipboard.writeText(t).then(()=>toast('คัดลอกข้อมูลแล้ว ไปวางในแอปใหม่ได้เลย'), ()=>toast('คัดลอกไม่ได้ ลองอีกครั้ง')); return; }
+  if (a==='importData') { pk=null; return openSheet(`<div class="row sp"><h2>นำเข้าข้อมูล</h2><button class="ic" data-p="close" aria-label="ปิด">${ic('x')}</button></div><div class="opts"><label class="lb" for="impT">วางข้อมูลที่คัดลอกมา</label><textarea class="txt" id="impT" rows="6" style="font-size:13px"></textarea><p class="mute" id="impE" role="alert"></p></div><div class="pfoot"><button class="pri wide" style="min-height:52px" data-p="doImport">นำเข้า (แทนที่ข้อมูลเดิม)</button></div>`, 'import'); }
+  if (a==='useSug') { const w=+b.dataset.w; items()[+b.dataset.i].sets.forEach(s=>{ if (!s.done) s.w=w; }); ui.view==='workout'?saveW():touch(); render(); return toast('อัปน้ำหนักแล้ว สู้ๆ!'); }
+  if (a==='plates') { const it=items()[+b.dataset.i], s=it.sets.find(x=>!x.done)||it.sets[0]; return plateSheet(+(s&&s.w)||20); }
+  if (a==='av') { ui.av = b.dataset.c; document.querySelectorAll('[data-a=av]').forEach(x=>x.setAttribute('aria-pressed', x===b)); $('pv').style.background=`var(--t-${ui.av})`; return; }
+  if (a==='saveProfile') {
+    const n=$('pfName').value.trim(), hv=$('pfH').value.trim(), tv=$('pfT').value.trim(), H=num(hv), T=num(tv);
+    if ((hv && (!H || H<80 || H>250)) || (tv && (!T || T<20 || T>300))) { $('pfErr').textContent = hv && (!H||H<80||H>250) ? 'ส่วนสูงควรอยู่ระหว่าง 80–250 ซม.' : 'น้ำหนักเป้าหมายควรอยู่ระหว่าง 20–300 กก.'; return; }
+    S.name=n; S.profile=Object.assign({}, S.profile, {height:H||null, target:T||null, avatar: ui.av || (ui.ch ? GANG[ui.ch].bg : (S.profile||{}).avatar) || GANG[ui.ch||curChar()].bg, char: ui.ch || curChar(), style: ui.ps || curStyle()}); touch(); go('me'); return commit('บันทึกโปรไฟล์แล้ว'); }
+  if (a==='bEdit') return bodySheet(S.body.find(x=>x.id===b.dataset.b));
+  if (a==='wipeBody') { if (confirmKey!=='wipeBody') { confirmKey='wipeBody'; return render(); } confirmKey=null; S.body=[]; touch(); render(); return commit('ล้างบันทึกร่างกายแล้ว'); }
+  if (a==='color') { routineById(ui.rid).color=b.dataset.c; touch(); return render(); }
+  if (a==='goal') { S.goal=Math.max(1,Math.min(7,S.goal+(+b.dataset.d))); touch(); return render(); }
+  if (a==='restDef') { S.rest=Math.max(15,Math.min(600,(S.rest||90)+(+b.dataset.d))); touch(); return render(); }
+  if (a==='sw') { S[b.dataset.k] = S[b.dataset.k]===false; touch(); return render(); }
+  if (a==='wipe') { if (confirmKey!=='wipe') { confirmKey='wipe'; return render(); } confirmKey=null; S.history=[]; S.noDemo=true; touch(); render(); return commit('ล้างประวัติแล้ว'); }
+  if (a==='r-'||a==='r+') { rest.end=Math.max(Date.now()+1000, rest.end+(a==='r+'?15:-15)*1000); ls.set('wk-rest',rest); return tick(); }
+  if (a==='rskip') { rest.end=0; restWas=false; ls.set('wk-rest',rest); return tick(); }
+  if (a==='delR') { if (confirmKey!=='delR') { confirmKey='delR'; return render(); } S.schedule = S.schedule.map(x=>x===ui.rid?null:x); S.routines=S.routines.filter(r=>r.id!==ui.rid); touch(); ui={view:'routines'}; ls.set('wk-ui',ui); render(); return commit('ลบโปรแกรมแล้ว'); }
+  if (a==='cancelW') { if (confirmKey!=='cancelW') { confirmKey='cancelW'; return render(); } W=null; rest.end=0; ls.set('wk-active',null); ls.set('wk-rest',rest); toast('หนีได้ก็หนีไป… พรุ่งนี้มาใหม่นะ'); return go('today'); }
+  if (a==='hDel') { const k='h'+b.dataset.h; if (confirmKey!==k) { confirmKey=k; return render(); } S.history=S.history.filter(h=>h.id!==b.dataset.h); touch(); confirmKey=null; render(); return commit('ลบแล้ว'); }
+  if (!['tick','setAdd','setDel','exDel','exUp','exDown','ssTog'].includes(a)) return;
+  const list = items(), live = ui.view==='workout';
+  if (a==='tick') {
+    const it = list[i], s = it.sets[j]; s.done = !s.done; s.pr = false; var isPRtoast = false;
+    if (s.done) {
+      try{ actx = actx || new (window.AudioContext||window.webkitAudioContext)(); actx.resume(); }catch(e){}
+      const b0 = best(it.ex), others = it.sets.filter((x,k)=>k!==j&&x.done).map(x=>+x.w||0);
+      const isPR = b0>0 && (+s.w||0) > Math.max(b0,...others); s.pr = isPR; isPRtoast = isPR;
+      if (goGroupEnd(list,i)) { rest.end = Date.now()+(S.rest||90)*1000; restWas=false; ls.set('wk-rest',rest); toast(isPR?say('pr'):say('tick')); }
+      else toast(isPR ? say('pr') : `ต่อ ${ssLabels(list)[i+1]} ${list[i+1].ex} เลย ไม่ต้องพัก!`);
+    }
+    saveW(); const rect = b.getBoundingClientRect(); render();
+    if (s.done) { hearts(rect.left+rect.width/2, rect.top+rect.height/2, it.sets.every(x=>x.done) ? 14 : 6); if (it.sets.every(x=>x.done) && !isPRtoast) toast(`จบ ${it.ex} แล้ว! เก่งมาก`); }
+    return;
+  }
+  if (a==='ssTog') list[i].ss = !list[i].ss;
+  if (a==='setAdd') { const st=list[i].sets, l=st[st.length-1]||{w:0,reps:10}; st.push(live?{w:l.w,reps:l.reps,done:false}:{w:l.w,reps:l.reps}); }
+  if (a==='setDel') { const s=list[i].sets.splice(j,1)[0], ex=list[i]; toast('ลบเซตแล้ว', ()=>ex.sets.splice(j,0,s)); }
+  if (a==='exDel') { const it=list.splice(i,1)[0]; if (i>0 && i>=list.length) list[i-1].ss=false; toast(`ลบ “${it.ex}” แล้ว`, ()=>list.splice(i,0,it)); }
+  if (a==='exUp' && i>0) [list[i-1],list[i]]=[list[i],list[i-1]];
+  if (a==='exDown' && i<list.length-1) [list[i+1],list[i]]=[list[i],list[i+1]];
+  if (list.length) list[list.length-1].ss = false;
+  live ? saveW() : touch(); render();
+});
+app.addEventListener('input', e=>{
+  const t = e.target, f = t.dataset.f; if (!f) return;
+  if (f==='rname') { routineById(ui.rid).name = t.value; return touch(); }
+  if (f==='name') { S.name = t.value.trim(); return touch(); }
+  if (f==='note') { items()[+t.dataset.i].note = t.value; return ui.view==='workout' ? saveW() : touch(); }
+  const raw = t.value.replace(',','.'); items()[+t.dataset.i].sets[+t.dataset.j][f] = raw==='' ? '' : Math.max(0, (f==='reps'?parseInt(raw,10):parseFloat(raw))||0);
+  ui.view==='workout' ? (saveW(), wStats()) : touch();
+});
+app.addEventListener('focusin', e=>{ if (e.target.matches('.sets input')) e.target.select(); });
+addEventListener('scroll',()=>document.body.classList.toggle('sc',scrollY>18),{passive:true});
+
+render();
+const cel = ls.get('wk-celebrate'); if (cel) { ls.set('wk-celebrate', null); celebrate(cel); }
+/* ---------- account (Firebase) ---------- */
+function normState(){ S.routines.forEach((r,i)=>{ if(!r.color) r.color = COLORS[i%6]; }); if (!S.schedule) S.schedule=[null,null,null,null,null,null,null]; if (!S.goal) S.goal=4; if (!S.body) S.body=[]; if (!S.custom) S.custom=[]; }
+function acctRow(){ const F = window.FB; if (!F) return ''; return F.user ? `<div class="set"><span>บัญชี<small>${esc(F.user.email||'')}</small></span><button class="sec" data-a="logout">ออกจากระบบ</button></div>` : `<div class="set"><span>บัญชี<small>ยังไม่ได้เข้าสู่ระบบ ข้อมูลอยู่ในเครื่องนี้เท่านั้น</small></span><button class="sec" data-a="login">เข้าสู่ระบบ</button></div>`; }
+function parade(){ const ks = Object.keys(GANG), n = ks.length;
+  return `<div class="parade" aria-hidden="true">${ks.map((k,i)=>`<span style="animation-delay:${-(i*14/n).toFixed(2)}s">${mascot(i%3?'happy':'proud','',k)}</span>`).join('')}</div>`; }
+const ONB = [
+  {c:'gk', mood:'smug', bg:'yellow', t:'จัดท่าเองได้ทุกอย่าง', d:'เลือกจาก 144 ท่า กำหนดเซต ครั้ง และน้ำหนักได้ทุกเซต จัดตารางทั้งสัปดาห์ในที่เดียว'},
+  {c:'bean', mood:'happy', bg:'pink', t:'มีเพื่อนจอมกวนคอยเชียร์', d:'ติ๊กเซตแล้วจับเวลาพักให้ บอกเมื่อทำสถิติใหม่ และแนะนำน้ำหนักครั้งหน้า'},
+  {c:'berry', mood:'proud', bg:'violet', t:'เก็บไฟ ปลดเหรียญ ขึ้นเลเวล', d:'ฝึกติดกันไฟยิ่งลุก ทำมิชชั่นรายสัปดาห์ สะสมเหรียญ 20 แบบ'}
+];
+function onboarding(){
+  const el = $('onb');
+  el.innerHTML = `<button class="ghost onbskip" data-a="onbDone">ข้าม</button>
+    <div class="onbtrack" id="onbT">${ONB.map((s,i)=>`<section class="onbslide" aria-label="${i+1} จาก ${ONB.length}"><div class="onbpic" style="background:var(--t-${s.bg})"><div class="bob">${mascot(s.mood,'',s.c)}</div></div><h1>${s.t}</h1><p class="mute">${s.d}</p></section>`).join('')}</div>
+    <div class="onbdots">${ONB.map((_,i)=>`<i class="${i?'':'on'}"></i>`).join('')}</div>
+    <button class="pri wide onbnext" data-a="onbNext" style="max-width:340px;min-height:54px">ถัดไป</button>`;
+  el.classList.add('on');
+  const T = $('onbT');
+  T.addEventListener('scroll', ()=>{ const k = Math.round(T.scrollLeft / T.clientWidth); el.querySelectorAll('.onbdots i').forEach((d,i)=>d.classList.toggle('on', i===k)); el.querySelector('.onbnext').textContent = k===ONB.length-1 ? 'เริ่มเลย!' : 'ถัดไป'; }, {passive:true});
+}
+document.addEventListener('click', e=>{ const b = e.target.closest('[data-a]'); if (!b) return;
+  if (b.dataset.a==='onbNext') { const T=$('onbT'), k=Math.round(T.scrollLeft/T.clientWidth); if (k < ONB.length-1) T.scrollTo({left:(k+1)*T.clientWidth, behavior:'smooth'}); else b.dataset.a='onbDone'; }
+  if (b.dataset.a==='onbDone') { ls.set('wk-onb', 1); $('onb').classList.remove('on'); }
+});
+addEventListener('keydown', e=>{ if (!$('onb').classList.contains('on')) return; const T=$('onbT'); if (e.key==='ArrowRight') T.scrollBy({left:T.clientWidth,behavior:'smooth'}); if (e.key==='ArrowLeft') T.scrollBy({left:-T.clientWidth,behavior:'smooth'}); });
+if (!ls.get('wk-onb')) setTimeout(onboarding, 0);
+function loginScreen(on){
+  const el = $('login'); if (!on) { el.classList.remove('on'); return; }
+  el.innerHTML = `<div class="mwrap bob">${mascot('happy')}</div><h1>ก้อนกล้าม</h1><p class="mute" style="margin:4px 0 20px">แอปฝึกที่จัดท่าเอง พร้อมเพื่อนจอมกวน</p>
+    <button class="pri wide" style="max-width:320px;min-height:54px" data-a="login">เข้าสู่ระบบด้วย Google</button>
+    <button class="ghost" style="margin-top:10px" data-a="skipLogin">ใช้ในเครื่องนี้ไปก่อน</button>
+    <p class="mute" style="font-size:13px;max-width:320px;margin-top:16px">เข้าสู่ระบบแล้วข้อมูลจะซิงก์ทุกเครื่อง และไม่หายถ้าล้างเบราว์เซอร์</p>${parade()}`;
+  el.classList.add('on');
+}
+addEventListener('fb-auth', async e=>{
+  const u = e.detail, F = window.FB;
+  if (!F) return;
+  if (!u) { if (!ls.get('wk-skip')) loginScreen(true); return render(); }
+  loginScreen(false);
+  try { const remote = await F.load(u.uid);
+    if (remote && Array.isArray(remote.routines)) { S = remote; normState(); ls.set('wk-cache', S); }
+    else { S.noDemo = true; S.history = S.history.filter(h=>!h.sample); await F.save(u.uid, S); }
+  } catch(err){ toast('โหลดข้อมูลจากบัญชีไม่ได้ ใช้ข้อมูลในเครื่องไปก่อน'); }
+  render();
+});
+document.addEventListener('click', e=>{ const b = e.target.closest('[data-a]'); if (!b) return;
+  if (b.dataset.a==='login' && window.FB) { ls.set('wk-skip', null); window.FB.login().catch(()=>toast('เข้าสู่ระบบไม่สำเร็จ ลองอีกครั้ง')); }
+  if (b.dataset.a==='skipLogin') { ls.set('wk-skip', 1); loginScreen(false); }
+  if (b.dataset.a==='logout' && window.FB) { window.FB.logout(); ls.set('wk-cache', null); location.reload(); }
+});
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+</script>
+<script src="firebase-config.js"></script>
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+import { initializeFirestore, persistentLocalCache, doc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+const cfg = window.FIREBASE_CONFIG;
+if (cfg && cfg.apiKey && !/^ใส่/.test(cfg.apiKey)) {
+  const app = initializeApp(cfg), auth = getAuth(app), db = initializeFirestore(app, { localCache: persistentLocalCache() });
+  window.FB = { user: null,
+    login: async () => { const p = new GoogleAuthProvider(); try { await signInWithPopup(auth, p); } catch (e) { if (e.code !== 'auth/popup-closed-by-user') await signInWithRedirect(auth, p); } },
+    logout: () => signOut(auth),
+    load: async (uid) => { const s = await getDoc(doc(db, 'users', uid)); return s.exists() ? s.data().state : null; },
+    // shortcut: whole state in one document (1 MiB limit, ~500+ workouts); split history into a subcollection when it grows
+    save: (uid, state) => setDoc(doc(db, 'users', uid), { state: JSON.parse(JSON.stringify(state)), updated: Date.now() }) };
+  onAuthStateChanged(auth, u => { window.FB.user = u; dispatchEvent(new CustomEvent('fb-auth', { detail: u })); });
+}
+</script>
+</body>
+</html>
