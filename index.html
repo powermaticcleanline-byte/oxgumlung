@@ -911,11 +911,11 @@ function wStats(){
   $('wm').innerHTML = mascot(pct>=100?'proud':pct>50?'tired':'happy','style="left:'+pct+'%"');
   $('wv').textContent = fmt(vol(W.items.map(it=>({sets:it.sets.filter(s=>s.done)}))));
 }
-let restWas = false;
+let restWas = false, lastCount = 0;
 function tick(){
   if (W && $('el')) $('el').textContent = clock((Date.now()-W.start)/1000);
   const left = (rest.end - Date.now())/1000, on = !!W && left > 0, show = on && ui.view==='workout';
-  if (on) { if (!restWas) { $('rm').innerHTML = mascot('tired'); $('rl').textContent = say('restT'); } $('rt').textContent = clock(left); }
+  if (on) { if (!restWas) { lastCount=0; $('rm').innerHTML = mascot('tired'); $('rl').textContent = say('restT'); } $('rt').textContent = clock(left); const sec=Math.ceil(left); if (sec<=3 && sec!==lastCount) { lastCount=sec; sfx('count'); } }
   else if (restWas) { beep(); toast(say('restEnd')); rest.end=0; ls.set('wk-rest',rest); }
   $('rest').classList.toggle('on', show); restWas = on;
   const fr = $('frest'); if (fr) fr.textContent = on ? ' · พัก '+clock(left) : '';
@@ -927,7 +927,13 @@ function hearts(x, y, n){
     el.style.cssText = `left:${x}px;top:${y}px;background:${cols[k%5]};--dx:${(Math.random()-.5)*120}px;--dy:${-60-Math.random()*90}px;--r:${(Math.random()-.5)*90}deg`;
     document.body.appendChild(el); setTimeout(()=>el.remove(), 900); }
 }
-function beep(){ if (S.sound===false) return; try{ if(!actx) return; [0,.18].forEach(dt=>{ const o=actx.createOscillator(), g=actx.createGain(), t=actx.currentTime+dt; o.frequency.value=880+dt*1200; g.gain.setValueAtTime(.25,t); g.gain.exponentialRampToValueAtTime(.001,t+.25); o.connect(g).connect(actx.destination); o.start(t); o.stop(t+.26); }); }catch(e){} }
+function tone(f,t0,d,g,type){ const o=actx.createOscillator(), v=actx.createGain(), t=actx.currentTime+t0; o.type=type||'sine'; o.frequency.value=f; v.gain.setValueAtTime(g,t); v.gain.exponentialRampToValueAtTime(.001,t+d); o.connect(v).connect(actx.destination); o.start(t); o.stop(t+d+.02); }
+const SFX={ tick:[[660,0,.09,.35,'triangle'],[990,.07,.12,.3,'triangle']], pr:[[523,0,.12,.4,'square'],[659,.1,.12,.4,'square'],[784,.2,.12,.4,'square'],[1047,.3,.3,.4,'square']], count:[[880,0,.12,.5,'square']], rest:[[880,0,.25,.6,'square'],[1320,.2,.4,.6,'square']] };
+const VIB={ tick:15, pr:[40,40,40,40,120], count:30, rest:[200,100,200] };
+function sfx(k){ if (S.sound===false) return; try{ navigator.vibrate&&navigator.vibrate(VIB[k]); if(!actx) return; actx.resume(); SFX[k].forEach(a=>tone(...a)); }catch(e){} }
+function beep(){ sfx('rest'); }
+// ปลดล็อกเสียงตั้งแต่แตะครั้งแรก + ให้ iPhone เล่นเสียงแม้เปิดโหมดเงียบ (Safari 16.4+)
+addEventListener('pointerdown',()=>{ try{ if(navigator.audioSession) navigator.audioSession.type='playback'; actx = actx || new (window.AudioContext||window.webkitAudioContext)(); actx.resume(); }catch(e){} },{capture:true});
 setInterval(tick, 1000);
 
 /* ---------- workout ---------- */
@@ -1209,7 +1215,7 @@ document.addEventListener('click', e=>{
     if (s.done) {
       try{ actx = actx || new (window.AudioContext||window.webkitAudioContext)(); actx.resume(); }catch(e){}
       const b0 = best(it.ex), others = it.sets.filter((x,k)=>k!==j&&x.done).map(x=>+x.w||0);
-      const isPR = b0>0 && (+s.w||0) > Math.max(b0,...others); s.pr = isPR; isPRtoast = isPR;
+      const isPR = b0>0 && (+s.w||0) > Math.max(b0,...others); s.pr = isPR; isPRtoast = isPR; sfx(isPR?'pr':'tick');
       if (goGroupEnd(list,i)) { rest.end = Date.now()+(S.rest||90)*1000; restWas=false; ls.set('wk-rest',rest); toast(isPR?say('pr'):say('tick')); }
       else toast(isPR ? say('pr') : `ต่อ ${ssLabels(list)[i+1]} ${list[i+1].ex} เลย ไม่ต้องพัก!`);
     }
