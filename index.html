@@ -179,6 +179,7 @@ nav button svg{width:26px;height:26px}nav button[aria-current=page]{background:v
 .cele.on,.login.on{display:flex}
 .login{position:fixed;inset:0;z-index:14;overflow:hidden;background:var(--bg);display:none;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center}.login .mwrap{width:160px}.cele h1{font-size:34px;margin:8px 0 4px}.cele .mwrap{width:180px}
 .cele .tiles3{width:min(420px,100%);margin:18px 0}
+.gold svg{filter:sepia(1) saturate(4) hue-rotate(-12deg) brightness(1.08) drop-shadow(0 0 8px #ffd36b)}.party{position:relative}.party::before{content:'';position:absolute;left:50%;top:-14px;transform:translateX(-50%) rotate(-12deg);border:solid transparent;border-width:0 14px 30px;border-bottom-color:#ff6b5b;z-index:1}.party::after{content:'';position:absolute;left:calc(50% - 2px);top:-22px;width:10px;height:10px;border-radius:50%;background:#ffd36b;z-index:1}
 .conf{position:absolute;top:-20px;width:10px;height:16px;border-radius:3px;pointer-events:none}
 @media(prefers-reduced-motion:no-preference){.conf{animation:fall linear forwards}@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}.card{animation:pop .22s ease-out}@keyframes pop{from{opacity:0;transform:translateY(6px)}}}
 .note{font-size:14px;color:var(--mute);margin:10px 0}
@@ -587,6 +588,10 @@ function ssLabels(list){
 const goGroupEnd = (list,i) => !list[i].ss;
 
 /* ---------- views ---------- */
+const GOLD = Math.random() < .01;
+const isBday = () => { const b=(S.profile||{}).bday; if (!b) return false; const n=new Date(); return b.slice(5)===String(n.getMonth()+1).padStart(2,'0')+'-'+String(n.getDate()).padStart(2,'0'); };
+const THW = [['ช้าง',3000,'ตัว'],['รถเก๋ง',1200,'คัน'],['ควาย',500,'ตัว'],['รถตุ๊กตุ๊ก',400,'คัน'],['มอเตอร์ไซค์',110,'คัน'],['ตู้เย็น',60,'ตู้'],['ถังแก๊ส',30,'ถัง'],['แมวอ้วน',6,'ตัว'],['ทุเรียน',3,'ลูก']];
+function thaiW(kg){ if (!(kg>0)) return ''; const o = THW.find(t=>kg>=t[1]) || THW[THW.length-1], n = kg/o[1]; return `เท่ากับ${o[0]} ${n<10?Math.round(n*10)/10:Math.round(n)} ${o[2]}`; }
 function greet(){ const hr = new Date().getHours(); return hr<5?'ยังไม่นอนอีก':hr<11?'อรุณสวัสดิ์':hr<16?'หวัดดี':hr<20?'เย็นแล้วนะ':'ดึกแล้วนะ'; }
 function vToday(){
   const td = trainedDays(), today = day0(Date.now()), ws = weekStart(), dw = dowToday();
@@ -599,6 +604,14 @@ function vToday(){
   else if (new Date().getHours()>=22 || new Date().getHours()<5) { mood='sleep'; line = S.cheeky===false ? 'ดึกแล้ว พักผ่อนก่อนนะ พรุ่งนี้ค่อยลุย' : 'ดึกขนาดนี้ จะยกเหล็กหรือยกผ้าห่ม'; }
   else if (sr && /ขา/.test(sr.name)) line = say('leg');
   else if (!sr && anySched) { mood='sleep'; line=say('rest'); }
+  const nw = new Date(), hr0 = nw.getHours(), dow0 = nw.getDay(), bday = isBday();
+  if (bday) { mood='happy'; line = S.cheeky===false ? 'สุขสันต์วันเกิด! ขอให้แข็งแรงตลอดไปนะ' : 'สุขสันต์วันเกิด! แก่ขึ้นแต่แข็งแรงขึ้นนะ'; }
+  else if (!W && GOLD) { mood='happy'; line='โอ้โห น้องร่างทองโผล่! วันนี้ดวงดี ยกหนักได้'; }
+  else if (!W && !doneToday && hr0>=5 && hr0<22) {
+    if (dow0===1) { mood='tired'; line = S.cheeky===false ? 'วันจันทร์ เริ่มสัปดาห์เบาๆ ก็ได้นะ' : 'วันจันทร์… น้องก็ไม่อยากตื่น แต่ไปยกเถอะ'; }
+    else if (dow0===5) line = S.cheeky===false ? 'ศุกร์แล้ว ฝึกให้สุดก่อนพักสุดสัปดาห์' : 'ศุกร์แล้ว! ฝึกก่อนไปกินหมูกระทะ จะได้ไม่รู้สึกผิด';
+  }
+  if (bday && !window._party) { window._party = 1; setTimeout(()=>{ const d=document.createElement('div'); d.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:20;overflow:hidden'; const cols=['#ffd36b','#7fdc9a','#8cc8ff','#ff9ec4','#f6a08e','#b49cff']; d.innerHTML=Array.from({length:40},(_,i)=>`<i class="conf" style="left:${Math.random()*100}%;background:${cols[i%6]};animation-duration:${2+Math.random()*2.5}s;animation-delay:${Math.random()*.8}s"></i>`).join(''); document.body.appendChild(d); setTimeout(()=>d.remove(),6000); },300); }
   const mins = [0,0,0,0,0,0,0]; S.history.filter(h=>h.date>=ws).forEach(h=>{ mins[(new Date(h.date).getDay()+6)%7] += h.dur/60; });
   const mx = Math.max(45,...mins), tot = mins.reduce((a,b)=>a+b,0);
   return `<header class="top"><div><div class="mute">${new Date().toLocaleDateString('th-TH',{weekday:'long',day:'numeric',month:'long'})}</div><h1>${greet()} ${esc(S.name||'นักยก')}!</h1></div>
@@ -609,7 +622,7 @@ function vToday(){
       <div class="bubble">${esc(line)}</div>
       <div class="row" style="flex-wrap:wrap;gap:4px">${W?`<button class="pri" data-a="go" data-v="workout">ฝึกต่อ</button>`:sr?`<button class="pri" data-a="start" data-r="${sr.id}">${doneToday?'ฝึกอีกรอบ':'เริ่มฝึก'}</button><button class="ghost" data-a="choose">เล่นอย่างอื่น</button>`
         :`<button class="pri" data-a="choose">เลือกโปรแกรม</button>${anySched?'':'<button class="ghost" data-a="go" data-v="cal">จัดตาราง</button>'}`}</div></div>
-    <div class="bob">${mascot(mood)}</div></div>
+    <div class="bob${GOLD?' gold':''}${bday?' party':''}">${mascot(mood)}</div></div>
   <div class="card tint t-lime"><div class="row sp"><h2>สัปดาห์นี้</h2><button class="row firebtn" data-a="go" data-v="ach" aria-label="ไฟติดกัน ${streak()} วัน ดูความสำเร็จ">${flameSvg(streak())}<b>${streak()}</b></button><span style="flex:1"></span><span class="flag">${Math.min(wkDays,S.goal)} / ${S.goal} วัน</span></div>
     <div class="week">${DOW.map((d,i)=>{ const t=day0(ws+i*864e5+36e5);
       const k = td.has(t)?face(i%2?'smile':'happy',td.get(t)) : t<today?face('sleep') : face('blank');
@@ -808,7 +821,8 @@ function vStats(){
   const tab = ui.st || 'mus';
   const rows = tab==='mus' ? Object.entries(mus).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([m,n])=>`<div class="hrow"><span>${esc(m)}</span><div class="meter"><i style="width:${n/mm*100}%;background:var(--s-${mc[m]||'violet'})"></i></div><span>${n} เซต</span></div>`)
     : exs.slice(0,5).map((e,i)=>`<div class="hrow"><span>${i+1}. ${esc(e)}</span><div class="meter"><i style="width:${cnt[e]/cnt[exs[0]]*100}%;background:var(--s-orange)"></i></div><span>${cnt[e]} ครั้ง</span></div>`);
-  return `<header class="top"><h1>สถิติ</h1></header>
+  const m0 = new Date(); m0.setDate(1); m0.setHours(0,0,0,0); const mvol = vol(H.filter(h=>h.date>=+m0).flatMap(h=>h.items));
+  return `<header class="top"><div><h1>สถิติ</h1>${mvol?`<div class="mute">เดือนนี้ยกรวม${thaiW(mvol)}</div>`:''}</div></header>
   <div class="xchips">${exs.map(e=>`<button class="chip" data-a="sx" data-x="${esc(e)}" aria-pressed="${e===ui.sx}">${esc(e)}</button>`).join('')}</div>
   <div class="card tint t-sky grow"><div class="row sp" style="align-items:flex-end"><div><div class="mute">น้ำหนักสูงสุด · ${esc(ui.sx)}</div><div class="num">${fmt(top)} <small>กก.</small></div></div><span class="flag" style="background:var(--card);color:var(--ink)">${gain>0?'+'+fmt(gain)+' กก.':pts.length>1?'ทรงตัว':'ครั้งแรก'}</span></div>
     <div class="fig"><svg id="chart" role="img" aria-label="กราฟน้ำหนักสูงสุดของ ${esc(ui.sx)} แต่ละครั้ง"></svg></div></div>
@@ -854,6 +868,7 @@ function vProfile(){
     <label class="lb" for="pfName" style="margin-top:0">ชื่อเล่น</label><input class="txt" id="pfName" value="${esc(S.name)}" placeholder="นักยก" maxlength="20">
     <div class="row" style="gap:12px"><div style="flex:1"><label class="lb" for="pfH">ส่วนสูง (ซม.)</label><input class="txt" id="pfH" inputmode="decimal" value="${pf.height||''}" placeholder="เช่น 172"></div>
     <div style="flex:1"><label class="lb" for="pfT">น้ำหนักเป้าหมาย (กก.)</label><input class="txt" id="pfT" inputmode="decimal" value="${pf.target||''}" placeholder="เช่น 75"></div></div>
+    <label class="lb" for="pfB">วันเกิด <span class="mute">(ไม่บังคับ)</span></label><input class="txt" id="pfB" type="date" value="${esc(pf.bday||'')}">
     <p class="mute" id="pfErr" role="alert" style="margin:8px 0 0"></p></div>`;
 }
 function vBody(){
@@ -971,7 +986,7 @@ function celebrate(c){
   const cols = ['#ffd36b','#7fdc9a','#8cc8ff','#ff9ec4','#f6a08e','#b49cff'];
   $('cele').innerHTML = Array.from({length:36},(_,i)=>`<i class="conf" style="left:${Math.random()*100}%;background:${cols[i%6]};animation-duration:${2+Math.random()*2.5}s;animation-delay:${Math.random()*.8}s"></i>`).join('')+
     `<div class="mwrap bob">${mascot('proud')}</div><h1>${esc(c.line)}</h1><p style="margin:0;font:19px Itim,Mali,sans-serif;color:var(--mute)">${c.pr?`ทำสถิติใหม่ ${c.pr} ท่า! โหดเกิน`:'ไม่มี PR วันนี้ แต่มาฝึกก็ชนะแล้ว'}</p>
-    <div class="tiles3"><div><div class="num">${dur(c.dur)}</div><small>เวลา</small></div><div><div class="num">${c.sets}</div><small>เซต</small></div><div><div class="num">${fmt(c.vol)}</div><small>กก. รวม</small></div></div>
+    <div class="tiles3"><div><div class="num">${dur(c.dur)}</div><small>เวลา</small></div><div><div class="num">${c.sets}</div><small>เซต</small></div><div><div class="num">${fmt(c.vol)}</div><small>กก. รวม</small></div></div>${thaiW(c.vol)?`<p class="mute" style="margin:-4px 0 10px">วันนี้ยกรวม${thaiW(c.vol)}</p>`:''}
     <div class="flag" style="margin-bottom:14px">+${c.xp||0} XP</div>
     ${(c.badges||[]).length?`<div class="newb"><div class="mute">ปลดล็อกเหรียญใหม่!</div><div class="row" style="justify-content:center;gap:12px;flex-wrap:wrap">${c.badges.map(id=>{ const b=BADGES.find(x=>x.id===id); return b?`<div class="bdg pop">${medal(b,true)}<b>${esc(b.name)}</b></div>`:''; }).join('')}</div></div>`:''}
     <button class="pri" data-a="celeOk" style="min-width:220px;min-height:52px">เยี่ยม! ไปพักได้</button>`;
@@ -1195,7 +1210,7 @@ document.addEventListener('click', e=>{
   if (a==='saveProfile') {
     const n=$('pfName').value.trim(), hv=$('pfH').value.trim(), tv=$('pfT').value.trim(), H=num(hv), T=num(tv);
     if ((hv && (!H || H<80 || H>250)) || (tv && (!T || T<20 || T>300))) { $('pfErr').textContent = hv && (!H||H<80||H>250) ? 'ส่วนสูงควรอยู่ระหว่าง 80–250 ซม.' : 'น้ำหนักเป้าหมายควรอยู่ระหว่าง 20–300 กก.'; return; }
-    S.name=n; S.profile=Object.assign({}, S.profile, {height:H||null, target:T||null, avatar: ui.av || (ui.ch ? GANG[ui.ch].bg : (S.profile||{}).avatar) || GANG[ui.ch||curChar()].bg, char: ui.ch || curChar(), style: ui.ps || curStyle()}); touch(); go('me'); return commit('บันทึกโปรไฟล์แล้ว'); }
+    S.name=n; S.profile=Object.assign({}, S.profile, {bday:$('pfB').value||null, height:H||null, target:T||null, avatar: ui.av || (ui.ch ? GANG[ui.ch].bg : (S.profile||{}).avatar) || GANG[ui.ch||curChar()].bg, char: ui.ch || curChar(), style: ui.ps || curStyle()}); touch(); go('me'); return commit('บันทึกโปรไฟล์แล้ว'); }
   if (a==='bEdit') return bodySheet(S.body.find(x=>x.id===b.dataset.b));
   if (a==='wipeBody') { if (confirmKey!=='wipeBody') { confirmKey='wipeBody'; return render(); } confirmKey=null; S.body=[]; touch(); render(); return commit('ล้างบันทึกร่างกายแล้ว'); }
   if (a==='color') { routineById(ui.rid).color=b.dataset.c; touch(); return render(); }

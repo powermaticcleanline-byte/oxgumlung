@@ -1,5 +1,5 @@
 // เก็บไฟล์แอปไว้ในเครื่อง เปิดได้แม้ไม่มีเน็ต (ข้อมูลออฟไลน์ Firestore จัดการเอง)
-const CACHE = 'kongklam-v3';
+const CACHE = 'kongklam-v4';
 const FILES = ['./', 'index.html', 'firebase-config.js', 'manifest.json', 'icon-192.png', 'icon-512.png'];
 self.addEventListener('install', e => e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting())));
 self.addEventListener('activate', e => e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim())));
